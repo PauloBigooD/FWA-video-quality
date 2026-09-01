@@ -1,0 +1,542 @@
+zabbix_export:
+  version: '7.4'
+  template_groups:
+    - uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    - uuid: 9b3355b828d04b20818881b2861475ca
+      template: 'UE Android LANCE'
+      name: 'UE Android LANCE'
+      templates:
+        - name: 'Template App Zabbix Agent'
+      groups:
+        - name: Templates
+      items:
+        - uuid: e097c87299644a6c911db54ad50b9297
+          name: Manufacturer
+          type: ZABBIX_ACTIVE
+          key: android.manufacturer
+          value_type: TEXT
+        - uuid: 8c825b5a73954f5a8aae6058a078f6fd
+          name: Model
+          type: ZABBIX_ACTIVE
+          key: android.model
+          delay: 24h
+          value_type: TEXT
+          tags:
+            - tag: Application
+              value: General
+        - uuid: a61f3198f04e49c185659c6419377c57
+          name: 'CPU Usage estimated (total)'
+          type: CALCULATED
+          key: cpu.usage.estimated
+          delay: 10s
+          value_type: FLOAT
+          trends: '0'
+          units: '%'
+          params: |
+            (
+            last(//system.cpu.freq[0,current]) +
+            last(//system.cpu.freq[1,current]) +
+            last(//system.cpu.freq[2,current]) +
+            last(//system.cpu.freq[3,current]) +
+            last(//system.cpu.freq[4,current]) +
+            last(//system.cpu.freq[5,current]) +
+            last(//system.cpu.freq[6,current]) +
+            last(//system.cpu.freq[7,current])
+            ) 
+            /
+            16400000000
+            * 100
+          tags:
+            - tag: Application
+              value: CPU
+        - uuid: 0b48be6772d34b3cb485a2b14942e0e8
+          name: 'Display state'
+          key: 'display.state[0]'
+          value_type: TEXT
+          tags:
+            - tag: Application
+              value: General
+        - uuid: 04ed6ba3ba0d40e199c2fc9ec500ace4
+          name: GPS
+          type: ZABBIX_ACTIVE
+          key: 'gps[50]'
+          delay: 60s
+          history: 90d
+          value_type: CHAR
+          inventory_link: LOCATION
+          tags:
+            - tag: Application
+              value: GPS
+        - uuid: 22d812f639434d988915edcf08bf3c71
+          name: 'GPS latitude'
+          type: DEPENDENT
+          key: 'gps[latitude]'
+          history: 90d
+          value_type: FLOAT
+          trends: '0'
+          inventory_link: LOCATION_LAT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.latitude
+          master_item:
+            key: 'gps[50]'
+          tags:
+            - tag: Application
+              value: GPS
+        - uuid: 337a561886ce4d108e83068f0b3b9c21
+          name: 'GPS longitude'
+          type: DEPENDENT
+          key: 'gps[longitude]'
+          history: 90d
+          value_type: FLOAT
+          trends: '0'
+          inventory_link: LOCATION_LON
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.longitude
+          master_item:
+            key: 'gps[50]'
+          tags:
+            - tag: Application
+              value: GPS
+        - uuid: bc539741905a4d72aa459e0839843e49
+          name: 'Network carrier'
+          key: net.carrier
+          value_type: TEXT
+          status: DISABLED
+        - uuid: 59e4e73339564c8f9b7d566e14e5a644
+          name: 'Connectivity type'
+          key: net.connectivity
+          value_type: CHAR
+          tags:
+            - tag: Application
+              value: General
+        - uuid: 6ba97d1d3a3c436fa33e0b16b5f59efc
+          name: IPs
+          type: ZABBIX_ACTIVE
+          key: net.if.ips
+          value_type: TEXT
+        - uuid: ffcaeec90d684dac827d7d4f7d253e0a
+          name: 'Roaming status'
+          type: ZABBIX_ACTIVE
+          key: net.roaming
+        - uuid: 4a6b36a266984e40a9d72675e1a521e1
+          name: 'Cellular signal strength'
+          key: net.signal_strength
+          tags:
+            - tag: Application
+              value: General
+        - uuid: 8bc5dac3cb2f4142bc3dc128fcc02bd1
+          name: 'Wifi BSSID MAC'
+          type: ZABBIX_ACTIVE
+          key: net.wifi.bssid
+          delay: 24h
+          value_type: CHAR
+          tags:
+            - tag: Application
+              value: Wifi
+        - uuid: 6ad5819d493c46cba9943f75cb64326b
+          name: 'Wifi signal strength'
+          key: net.wifi.signal
+          value_type: FLOAT
+          tags:
+            - tag: Application
+              value: Wifi
+        - uuid: 71442d7947ac42a3a82b273133680445
+          name: 'Wifi SSID'
+          type: ZABBIX_ACTIVE
+          key: net.wifi.ssid
+          value_type: TEXT
+          tags:
+            - tag: Application
+              value: Wifi
+        - uuid: 86ab9214cf264afda607e8e3fe4f752d
+          name: 'Wifi status'
+          key: net.wifi.status
+          tags:
+            - tag: Application
+              value: Wifi
+        - uuid: 6fa3447aa5124cb2b256204723302a24
+          name: 'Battery health'
+          type: ZABBIX_ACTIVE
+          key: power.battery_health
+          value_type: CHAR
+          tags:
+            - tag: Application
+              value: Power
+        - uuid: 664fb97ce5414d33bfd91daa4173668f
+          name: 'Battery Level'
+          type: ZABBIX_ACTIVE
+          key: power.battery_level
+          delay: 60s
+          history: 90d
+          tags:
+            - tag: Application
+              value: Power
+        - uuid: 986347a4a7a64d0685fe859be320a33e
+          name: 'Battery temperature'
+          type: ZABBIX_ACTIVE
+          key: power.battery_temperature
+          units: °C
+          tags:
+            - tag: Application
+              value: Power
+        - uuid: ce42b95df29048e99362764ffe28ae47
+          name: 'Device interactive status'
+          type: ZABBIX_ACTIVE
+          key: power.is_interactive
+          value_type: CHAR
+        - uuid: 7754f60d927c4e9cb00071a971069611
+          name: 'Battery Source'
+          type: ZABBIX_ACTIVE
+          key: power.source
+          delay: 60s
+          history: 90d
+          value_type: CHAR
+          tags:
+            - tag: Application
+              value: Power
+        - uuid: e2c697185cc4434581d05c42b54e4624
+          name: 'Battery Status'
+          key: power.status
+          delay: 60s
+          history: 90d
+          value_type: CHAR
+          tags:
+            - tag: Application
+              value: Power
+        - uuid: 9b42b88605e34236a3622c40fd1e21a3
+          name: 'Sensor light'
+          key: sensor.light
+          units: lux
+        - uuid: 98e3466b3685475897a9db4614ba6aef
+          name: 'Sensor proximity'
+          type: ZABBIX_ACTIVE
+          key: sensor.proximity
+          units: cm
+        - uuid: f4a635376210486c8e8e1a014eed31c2
+          name: 'CPU discovery'
+          type: ZABBIX_ACTIVE
+          key: system.cpu.discovery
+          value_type: TEXT
+          status: DISABLED
+          tags:
+            - tag: Application
+              value: CPU
+        - uuid: 94951d3259bd4ad88fdaa56220909e9c
+          name: 'CPU frequency - CPU 0'
+          type: ZABBIX_ACTIVE
+          key: 'system.cpu.freq[0,current]'
+          delay: 10s
+          units: Hz
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '1000'
+          tags:
+            - tag: Application
+              value: CPU
+        - uuid: 223d0e44e3974ca3b0fad7d93b6940a2
+          name: 'CPU frequency - CPU 1'
+          type: ZABBIX_ACTIVE
+          key: 'system.cpu.freq[1,current]'
+          delay: 10s
+          units: Hz
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '1000'
+          tags:
+            - tag: Application
+              value: CPU
+        - uuid: eb69e7adb0074766a85d149daca0be35
+          name: 'CPU frequency - CPU 2'
+          type: ZABBIX_ACTIVE
+          key: 'system.cpu.freq[2,current]'
+          delay: 10s
+          units: Hz
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '1000'
+          tags:
+            - tag: Application
+              value: CPU
+        - uuid: bd6765d2d76e4db284bcbeca2e797390
+          name: 'CPU frequency - CPU 3'
+          type: ZABBIX_ACTIVE
+          key: 'system.cpu.freq[3,current]'
+          delay: 10s
+          units: Hz
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '1000'
+          tags:
+            - tag: Application
+              value: CPU
+        - uuid: 7f9d2838d9c44525bf90f053c8fab28f
+          name: 'CPU frequency - CPU 4'
+          type: ZABBIX_ACTIVE
+          key: 'system.cpu.freq[4,current]'
+          delay: 10s
+          units: Hz
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '1000'
+          tags:
+            - tag: Application
+              value: CPU
+        - uuid: b783d7ae04e74ceeafb4a75c26f15761
+          name: 'CPU frequency - CPU 5'
+          type: ZABBIX_ACTIVE
+          key: 'system.cpu.freq[5,current]'
+          delay: 10s
+          units: Hz
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '1000'
+          tags:
+            - tag: Application
+              value: CPU
+        - uuid: 05b723802e194bb29ae51756b41b790c
+          name: 'CPU frequency - CPU 6'
+          type: ZABBIX_ACTIVE
+          key: 'system.cpu.freq[6,current]'
+          delay: 10s
+          units: Hz
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '1000'
+          tags:
+            - tag: Application
+              value: CPU
+        - uuid: 121dcb6042a04c77aef33eca34eb168a
+          name: 'CPU frequency - CPU 7'
+          type: ZABBIX_ACTIVE
+          key: 'system.cpu.freq[7,current]'
+          delay: 10s
+          units: Hz
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '1000'
+          tags:
+            - tag: Application
+              value: CPU
+        - uuid: b5ec3c691df14e4fab63142ad26503d4
+          name: 'CPU load'
+          type: ZABBIX_ACTIVE
+          key: 'system.cpu.load[]'
+          delay: 60s
+          history: 90d
+          value_type: FLOAT
+          status: DISABLED
+          tags:
+            - tag: Application
+              value: CPU
+        - uuid: dc692deb845d4142900aa00a4e1d2207
+          name: 'CPU Number'
+          type: ZABBIX_ACTIVE
+          key: system.cpu.num
+          delay: 1h
+          history: 90d
+          tags:
+            - tag: Application
+              value: CPU
+        - uuid: 5888fc170c184b6ab7b28f0b5578866b
+          name: 'CPU utilization'
+          type: ZABBIX_ACTIVE
+          key: 'system.cpu.util[]'
+          delay: 60s
+          history: 90d
+          value_type: FLOAT
+          status: DISABLED
+          tags:
+            - tag: Application
+              value: CPU
+        - uuid: 31d470ef75484f09a5dfc01bd72b9a01
+          name: Hostname
+          key: system.hostname
+          value_type: CHAR
+        - uuid: 77d91e8a4ef8499aa52d2a2e58616bfb
+          name: 'Local time'
+          key: 'system.localtime[utc]'
+          units: unixtime
+          tags:
+            - tag: Application
+              value: General
+        - uuid: cc7821d331b04388b741e76a4333f9a6
+          name: Architecture
+          type: ZABBIX_ACTIVE
+          key: system.sw.arch
+          delay: 24h
+          history: 90d
+          value_type: CHAR
+          inventory_link: TYPE
+          tags:
+            - tag: Application
+              value: General
+        - uuid: b16a475836e8461bbd54696faea54c69
+          name: OS
+          type: ZABBIX_ACTIVE
+          key: 'system.sw.os[full]'
+          delay: 24h
+          history: 90d
+          value_type: CHAR
+          inventory_link: OS_SHORT
+          tags:
+            - tag: Application
+              value: General
+        - uuid: 4ad845862c8f4a3bb9b159cce9e2d9a8
+          name: Uptime
+          key: system.uptime
+        - uuid: f12493d50be2400a943ac1244d31f4be
+          name: 'Memory Free'
+          type: ZABBIX_ACTIVE
+          key: 'vm.memory.size[free]'
+          delay: 10s
+          history: 90d
+          units: B
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '1000000'
+          tags:
+            - tag: Application
+              value: Memory
+        - uuid: 7728403d25814129bfe590f82d53b36a
+          name: 'Memory Free (percentage)'
+          key: 'vm.memory.size[pfree]'
+          history: 90d
+          status: DISABLED
+          units: B
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '1000000'
+          tags:
+            - tag: Application
+              value: Memory
+        - uuid: 692aca344868416a8f796f44456bff2d
+          name: 'Memory Total'
+          type: ZABBIX_ACTIVE
+          key: 'vm.memory.size[total]'
+          history: 90d
+          units: B
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '1000000'
+          tags:
+            - tag: Application
+              value: Memory
+        - uuid: 6959244f4a624d548920b758af1aae64
+          name: 'Memory Used'
+          type: CALCULATED
+          key: vm.memory.used
+          delay: 10s
+          history: 90d
+          units: B
+          params: 'last(//vm.memory.size[total]) - last(//vm.memory.size[free])'
+          tags:
+            - tag: Application
+              value: Memory
+      discovery_rules:
+        - uuid: c0864250630540318a56ec16a3b1c0ff
+          name: 'Network interface discovery'
+          key: net.if.discovery
+          delay: 30s
+          filter:
+            conditions:
+              - macro: '{#IFNAME}'
+                value: ^(wlan|rmnet0|rmnet1)
+          lifetime_type: DELETE_IMMEDIATELY
+          item_prototypes:
+            - uuid: bb32264041b7454891b43e8e8c90b15f
+              name: 'Incoming network traffic on {#IFNAME}'
+              key: 'net.if.in[{#IFNAME}]'
+              history: 90d
+              units: bps
+              preprocessing:
+                - type: CHANGE_PER_SECOND
+                - type: MULTIPLIER
+                  parameters:
+                    - '8'
+              tags:
+                - tag: Application
+                  value: Network
+            - uuid: 5ed9ec433c7d40caa287f04c14101162
+              name: 'Outgoing network traffic on {#IFNAME}'
+              key: 'net.if.out[{#IFNAME}]'
+              history: 90d
+              units: bps
+              preprocessing:
+                - type: CHANGE_PER_SECOND
+                - type: MULTIPLIER
+                  parameters:
+                    - '8'
+              tags:
+                - tag: Application
+                  value: Network
+        - uuid: 0f3edef020444a1a9e780b74134bf992
+          name: 'Mounted filesystem discovery'
+          key: vfs.fs.discovery
+          delay: 30s
+          filter:
+            conditions:
+              - macro: '{#FSNAME}'
+                value: ^/(mnt/expand|data)
+          lifetime_type: DELETE_IMMEDIATELY
+          item_prototypes:
+            - uuid: 3dd03dc1128745df880ffb5b5bc393a5
+              name: 'Free disk space on {#FSNAME}'
+              key: 'vfs.fs.size[{#FSNAME},free]'
+              history: 90d
+              units: B
+              tags:
+                - tag: Application
+                  value: Storage
+            - uuid: 64f640051e1a4f5b9736d0b8ab047432
+              name: 'Free disk space on {#FSNAME} (percentage)'
+              key: 'vfs.fs.size[{#FSNAME},pfree]'
+              history: 90d
+              units: '%'
+              tags:
+                - tag: Application
+                  value: Storage
+            - uuid: 55b1b08a2d1c41059a1f60cbdf02e384
+              name: 'Total disk space on {#FSNAME}'
+              key: 'vfs.fs.size[{#FSNAME},total]'
+              delay: 1h
+              history: 90d
+              units: B
+              tags:
+                - tag: Application
+                  value: Storage
+  graphs:
+    - uuid: 8b829c1d44084a648b328c00f67255af
+      name: 'CPU vs BATTERY'
+      ymin_type_1: FIXED
+      ymax_type_1: FIXED
+      graph_items:
+        - color: FF3333
+          calc_fnc: ALL
+          item:
+            host: 'UE Android LANCE'
+            key: 'system.cpu.load[]'
+        - sortorder: '1'
+          drawtype: GRADIENT_LINE
+          color: 3333FF
+          yaxisside: RIGHT
+          calc_fnc: ALL
+          item:
+            host: 'UE Android LANCE'
+            key: power.battery_level

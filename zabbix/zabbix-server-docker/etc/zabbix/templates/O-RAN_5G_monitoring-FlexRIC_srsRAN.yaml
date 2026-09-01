@@ -1,0 +1,884 @@
+zabbix_export:
+  version: '7.0'
+  template_groups:
+    - uuid: 07c028322d7c4e2180510b9d762b970f
+      name: srsRAN
+  templates:
+    - uuid: 477f603e19d74a5288b2d0e7ee4449c9
+      template: 'O-RAN 5G monitoring - FlexRIC srsRAN'
+      name: 'O-RAN 5G monitoring - FlexRIC srsRAN'
+      groups:
+        - name: srsRAN
+      discovery_rules:
+        - uuid: 00aaae3d57b94c5c95ba6abd1b25c213
+          name: 'Discovery E2SMs E2 Node'
+          key: srs.e2node.SM
+          delay: 1h
+          item_prototypes:
+            - uuid: 31dc370825be489ab3e4b0ee5f3acb6b
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: E2SM''s available'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_E2SM_SUP}, srs]'
+              trends: '0'
+              params: '{#E2_NODE_E2SM_SUP}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: f2db11bf0bbf4ec6b3a30b0f6af61cb8
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: MCC'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_MCC}, MCC]'
+              trends: '0'
+              params: '{#E2_NODE_MCC}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: bb031dabe8374085ad0b8829e6e49e4f
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: MNC'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_MNC}, MNC]'
+              trends: '0'
+              params: '{#E2_NODE_MNC}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: 0120ae57869a4ca48a0efcea66239b0f
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: {#E2_NODE_KPM_STYLE_TYPE_1}: IE List'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}, {#E2_NODE_KPM_SERVICE}, {#E2_NODE_KPM_STYLE_TYPE_1}, {#E2_NODE_KPM_STYLE_NAME_1}, {#E2_NODE_KPM_MEAS_LIST_1}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_KPM_MEAS_LIST_1}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: e52eb5e0eb8e42e8a9ec833b2eb53439
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: {#E2_NODE_KPM_STYLE_TYPE_1}: Style Name'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}, {#E2_NODE_KPM_SERVICE}, {#E2_NODE_KPM_STYLE_TYPE_1}, {#E2_NODE_KPM_STYLE_NAME_1}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_KPM_STYLE_NAME_1}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: 3c6df10311fb4fb3bc3e6b2f1abff2fa
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: {#E2_NODE_KPM_STYLE_TYPE_1}: Style Type'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}, {#E2_NODE_KPM_SERVICE}, {#E2_NODE_KPM_STYLE_TYPE_1}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_KPM_STYLE_TYPE_1}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: 6ab21e66ebcd4ca79ad7137dd97e7281
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: {#E2_NODE_KPM_STYLE_TYPE_2}: IE List'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}, {#E2_NODE_KPM_SERVICE}, {#E2_NODE_KPM_STYLE_TYPE_2}, {#E2_NODE_KPM_STYLE_NAME_2}, {#E2_NODE_KPM_MEAS_LIST_2}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_KPM_MEAS_LIST_2}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: dc346f168e02475e96107da53bde907f
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: {#E2_NODE_KPM_STYLE_TYPE_2}: Style Name'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}, {#E2_NODE_KPM_SERVICE}, {#E2_NODE_KPM_STYLE_TYPE_2}, {#E2_NODE_KPM_STYLE_NAME_2}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_KPM_STYLE_NAME_2}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: 4bde3ea8ebd3453cb891dfb57db4a0db
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: {#E2_NODE_KPM_STYLE_TYPE_2}: Style Type'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}, {#E2_NODE_KPM_SERVICE}, {#E2_NODE_KPM_STYLE_TYPE_2}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_KPM_STYLE_TYPE_2}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: 8a180c9fbe94461fb33e0f97301e6cfd
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: {#E2_NODE_KPM_STYLE_TYPE_3}: IE List'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}, {#E2_NODE_KPM_SERVICE}, {#E2_NODE_KPM_STYLE_TYPE_3}, {#E2_NODE_KPM_STYLE_NAME_3}, {#E2_NODE_KPM_MEAS_LIST_3}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_KPM_MEAS_LIST_3}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: 0dab2ccbe37f4032b25102d531ba7eec
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: {#E2_NODE_KPM_STYLE_TYPE_3}: Style Name'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}, {#E2_NODE_KPM_SERVICE}, {#E2_NODE_KPM_STYLE_TYPE_3}, {#E2_NODE_KPM_STYLE_NAME_3}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_KPM_STYLE_NAME_3}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: 0bb5823f6400463ca9d458fa2b694c09
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: {#E2_NODE_KPM_STYLE_TYPE_3}: Style Type'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}, {#E2_NODE_KPM_SERVICE}, {#E2_NODE_KPM_STYLE_TYPE_3}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_KPM_STYLE_TYPE_3}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: a58ababa6c1f4ddea971bee243b8db58
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: {#E2_NODE_KPM_STYLE_TYPE_4}: IE List'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}, {#E2_NODE_KPM_SERVICE}, {#E2_NODE_KPM_STYLE_TYPE_4}, {#E2_NODE_KPM_STYLE_NAME_4}, {#E2_NODE_KPM_MEAS_LIST_4}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_KPM_MEAS_LIST_4}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: f8d09824d7be478d9861b9658b6c8ba7
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: {#E2_NODE_KPM_STYLE_TYPE_4}: Style Name'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}, {#E2_NODE_KPM_SERVICE}, {#E2_NODE_KPM_STYLE_TYPE_4}, {#E2_NODE_KPM_STYLE_NAME_4}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_KPM_STYLE_NAME_4}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: 820b6dc5a9524a6da83c04bc9744752f
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: {#E2_NODE_KPM_STYLE_TYPE_5}: Style Name'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}, {#E2_NODE_KPM_SERVICE}, {#E2_NODE_KPM_STYLE_TYPE_4}, {#E2_NODE_KPM_STYLE_NAME_5}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_KPM_STYLE_NAME_5}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: 7587813f096948b18b1abd1218197a79
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: {#E2_NODE_KPM_STYLE_TYPE_4}: Style Type'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}, {#E2_NODE_KPM_SERVICE}, {#E2_NODE_KPM_STYLE_TYPE_4}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_KPM_STYLE_TYPE_4}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: ee9ebb8898de45a79bd46d3b4871ef93
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: {#E2_NODE_KPM_STYLE_TYPE_5}: IE List'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}, {#E2_NODE_KPM_SERVICE}, {#E2_NODE_KPM_STYLE_TYPE_5}, {#E2_NODE_KPM_STYLE_NAME_5}, {#E2_NODE_KPM_MEAS_LIST_5}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_KPM_MEAS_LIST_5}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: 5e7fb5ce8f63451cba1575db966adecd
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: {#E2_NODE_KPM_STYLE_TYPE_5}: Style Type'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}, {#E2_NODE_KPM_SERVICE}, {#E2_NODE_KPM_STYLE_TYPE_5}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_KPM_STYLE_TYPE_5}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: 4bfb5cb5ac9a4c99a42be47f73b62447
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: RIC Service'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}, {#E2_NODE_KPM_SERVICE}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_KPM_SERVICE}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: 56a9d46fd8bb4f4b91d336718f2758cf
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: {#E2_NODE_KPM_SERVICE}: Styles Total'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}, {#E2_NODE_KPM_STYLES}]'
+              trends: '0'
+              params: '{#E2_NODE_KPM_STYLES}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM KPM'
+            - uuid: 8fda846dd88c46ed86b98dae1b7eec10
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_2}: SM Name'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}, {#E2_NODE_SM_NAME_2}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_SM_NAME_2}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM RC'
+            - uuid: a4a340e36dc7444ab3a152777b32add5
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: OID ORAN-E2SM-KPM'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}, {#E2_NODE_SM_OID_2}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_SM_OID_2}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: 78c63183c9cf45ee816869f9b0b04bd3
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: ORAN-E2SM-KPM'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_2}]'
+              value_type: FLOAT
+              trends: '0'
+              params: '{#E2_NODE_SM_ID_2}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: a787a0f4abfd4514991b7a1a6a754074
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_3}: {#E2_NODE_RC_CTL_SERVICE}: {#E2_NODE_RC_CTL_STYLE_TYPE_1}: IE List'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_3}, {#E2_NODE_SM_OID_3}, {#E2_NODE_SM_NAME_3}, {#E2_NODE_RC_CTL_STYLES_COUNT}, {#E2_NODE_RC_CTL_SERVICE}, {#E2_NODE_RC_CTL_STYLE_TYPE_1}, {#E2_NODE_RC_CTL_STYLE_NAME_1}, {#E2_NODE_RC_CTL_STYLE_TYPE_1}, {#E2_NODE_RC_CTL_ACTION_NAME_1}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_RC_CTL_ACTION_NAME_1}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM RC'
+            - uuid: 2656d7e894734abda581d5e9f542538e
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_3}: {#E2_NODE_RC_CTL_SERVICE}: {#E2_NODE_RC_CTL_STYLE_TYPE_1}: IE List'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_3}, {#E2_NODE_SM_OID_3}, {#E2_NODE_SM_NAME_3}, {#E2_NODE_RC_CTL_STYLES_COUNT}, {#E2_NODE_RC_CTL_SERVICE}, {#E2_NODE_RC_CTL_STYLE_TYPE_1}, {#E2_NODE_RC_CTL_STYLE_NAME_1}, {#E2_NODE_RC_CTL_STYLE_TYPE_1}, {#E2_NODE_RC_CTL_ACTION_PRM_NAME_1}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_RC_CTL_ACTION_PRM_NAME_1}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM RC'
+            - uuid: d45700950d7047498a31f3f4a770442a
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_3}: {#E2_NODE_RC_CTL_SERVICE}: {#E2_NODE_RC_CTL_STYLE_TYPE_1}: Style Type'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_3}, {#E2_NODE_SM_OID_3}, {#E2_NODE_SM_NAME_3}, {#E2_NODE_RC_CTL_STYLES_COUNT}, {#E2_NODE_RC_CTL_SERVICE}, {#E2_NODE_RC_CTL_STYLE_TYPE_1}, {#E2_NODE_RC_CTL_STYLE_NAME_1}, {#E2_NODE_RC_CTL_STYLE_TYPE_1}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_RC_CTL_STYLE_TYPE_1}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM RC'
+            - uuid: 2dd0cdf6bdd044f7a725439924d77cf7
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_3}: {#E2_NODE_RC_CTL_SERVICE}: {#E2_NODE_RC_CTL_STYLE_TYPE_1}: Style Name'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_3}, {#E2_NODE_SM_OID_3}, {#E2_NODE_SM_NAME_3}, {#E2_NODE_RC_CTL_STYLES_COUNT}, {#E2_NODE_RC_CTL_SERVICE}, {#E2_NODE_RC_CTL_STYLE_TYPE_1}, {#E2_NODE_RC_CTL_STYLE_NAME_1}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_RC_CTL_STYLE_NAME_1}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM RC'
+            - uuid: e8bda76189674855b1c4bb0558d5a4ce
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_3}: {#E2_NODE_RC_CTL_SERVICE}: Styles Total'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_3}, {#E2_NODE_SM_OID_3}, {#E2_NODE_SM_NAME_3}, {#E2_NODE_RC_CTL_STYLES_COUNT}]'
+              params: '{#E2_NODE_RC_CTL_STYLES_COUNT}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM RC'
+            - uuid: 3414b856aed3482898ac2efe93cb8e9f
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_3}: {#E2_NODE_RC_CTL_SERVICE}: RIC Service'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_3}, {#E2_NODE_SM_OID_3}, {#E2_NODE_SM_NAME_3}, {#E2_NODE_RC_RPT_STYLES_COUNT}, {#E2_NODE_RC_CTL_SERVICE}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_RC_CTL_SERVICE}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM RC'
+            - uuid: 64b36bd4fe9e46eca1e409ece9e1d025
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_3}: SM Name'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_3}, {#E2_NODE_SM_OID_3}, {#E2_NODE_SM_NAME_3}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_SM_NAME_3}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM RC'
+            - uuid: 267bda7c814d419bb609aae68efbea15
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: OID ORAN-E2SM-RC'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_3}, {#E2_NODE_SM_OID_3}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_SM_OID_3}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: 32dce9bb1c3141f69589c9c4f9587564
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: ORAN-E2SM-RC'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_3}]'
+              value_type: FLOAT
+              trends: '0'
+              params: '{#E2_NODE_SM_ID_3}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: a39b68d8ddfd46819d056875be283cd7
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_142}: SM Name'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_142}, {#E2_NODE_SM_OID_142}, {#E2_NODE_SM_NAME_142}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_SM_NAME_142}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: 13474665fef14d1a987340de2a4041b2
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: OID MAC_STATS_V0'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_142}, {#E2_NODE_SM_OID_142}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_SM_OID_142}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: 30fccb5007b94a27b1c54f5fe9115556
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: MAC_STATS_V0'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_142}]'
+              value_type: FLOAT
+              trends: '0'
+              params: '{#E2_NODE_SM_ID_142}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: 5faddd1fa66e4f0db8324b6a629e278c
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_143}: SM Name'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_143}, {#E2_NODE_SM_OID_143}, {#E2_NODE_SM_NAME_143}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_SM_NAME_143}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: 81d318b866d744a2ae87e600564a666f
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: OID RLC_STATS_V0'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_143}, {#E2_NODE_SM_OID_143}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_SM_OID_143}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: b54683fc3e054d8eaeb3563b05eaaacf
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: RLC_STATS_V0'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_143}]'
+              value_type: FLOAT
+              trends: '0'
+              params: '{#E2_NODE_SM_ID_143}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: 9674e7d7dfbf44198abe068cfe383721
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_144}: SM Name'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_144}, {#E2_NODE_SM_OID_144}, {#E2_NODE_SM_NAME_144}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_SM_NAME_144}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: fae797803227464d939ec7295a2f73ec
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: OID PDCP_STATS_V0'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_144},{#E2_NODE_SM_OID_144}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_SM_OID_144}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: 37c2591c56d848219b63613d6f51a4f1
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: PDCP_STATS_V0'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_144}]'
+              value_type: FLOAT
+              trends: '0'
+              params: '{#E2_NODE_SM_ID_144}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: f3ada201f3bf4c7db5ffbc6804f6e0f0
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_145}: SM Name'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_145}, {#E2_NODE_SM_OID_145}, {#E2_NODE_SM_NAME_145}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_SM_NAME_145}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: 17da2c229b2842dcaa8444d98cd3b86e
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: OID SLICE_STATS_V0'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_145}, {#E2_NODE_SM_OID_145}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_SM_OID_145}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: 49bc7750cf11419bbfdedd24ec877244
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: SLICE_STATS_V0'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_145}]'
+              value_type: FLOAT
+              trends: '0'
+              params: '{#E2_NODE_SM_ID_145}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: ce32ca9d5b324f298604e7c214466216
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_146}: SM Name'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_146}, {#E2_NODE_SM_OID_146}, {#E2_NODE_SM_NAME_146}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_SM_NAME_146}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: c8b2191181264854a86f936de4f27dd6
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: OID TC_STATS_V0'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_146}, {#E2_NODE_SM_OID_146}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_SM_OID_146}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: 0619da95a4514586be4351320c359c65
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: TC_STATS_V0'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_146}]'
+              value_type: FLOAT
+              trends: '0'
+              params: '{#E2_NODE_SM_ID_146}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: 63cb4f37b1dd41a99d5e72f526a65e87
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: {#E2_NODE_SM_NAME_148}: SM Name'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_148}, {#E2_NODE_SM_OID_148}, {#E2_NODE_SM_NAME_148}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_SM_NAME_148}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: 7453fd5f026b4ffc8a895b924d8bafad
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: OID GTP_STATS_V0'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_148}, {#E2_NODE_SM_OID_148}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_SM_OID_148}'
+            - uuid: 722f48b86ed346f1a6797f50f4001a61
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: GTP_STATS_V0'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_SM_ID_148}]'
+              trends: '0'
+              params: '{#E2_NODE_SM_ID_148}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: a30b733526cf4b678e87f02e23ea95cc
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: E2 Node Type'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}, {#E2_NODE_TYPE}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#E2_NODE_TYPE}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+            - uuid: 63a30d85f79a46e19acdcd17ac098fbc
+              name: '{#E2_NODE_ID}: {#E2_NODE_TYPE}: E2 Node ID'
+              type: CALCULATED
+              key: 'srs.e2node.SM[{#E2_NODE_ID}, {#E2_NODE_TYPE}]'
+              trends: '0'
+              params: '{#E2_NODE_ID}'
+              tags:
+                - tag: E2_Node
+                  value: 'E2_Node - SM'
+          timeout: 10s
+          preprocessing:
+            - type: JAVASCRIPT
+              parameters:
+                - |
+                  try {
+                      // Tenta converter o valor recebido para JSON
+                      var obj = JSON.parse(value);
+                  
+                      // Valida se existe o campo "data" e se é uma lista
+                      if (!obj || !obj.data || !Array.isArray(obj.data)) {
+                          // Se não for o formato esperado, retorna o valor original sem mexer
+                          return value;
+                      }
+                  
+                      // Lista de IDs de Service Models que podem faltar
+                      var optional_ids = [2, 3, 142, 143, 144, 145, 146, 148];
+                  
+                      // Lista de Macros específicas do RC
+                      var rc_macros = [
+                          "{#E2_NODE_RC_CTL_SERVICE}",
+                          "{#E2_NODE_RC_RPT_SERVICE}",
+                          "{#E2_NODE_RC_RPT_STYLE_TYPE}",
+                          "{#E2_NODE_RC_CTL_STYLE_TYPE}",
+                          "{#E2_NODE_RC_RPT_STYLE_NAME}",
+                          "{#E2_NODE_RC_CTL_STYLE_NAME}",
+                          "{#E2_NODE_RC_RPT_ACTION_NAME}",
+                          "{#E2_NODE_RC_CTL_ACTION_NAME}",
+                          "{#E2_NODE_RC_RPT_ACTION_LIST_ID}",
+                          "{#E2_NODE_RC_CTL_ACTION_LIST_ID}",
+                          "{#E2_NODE_RC_ACTION_2_PRM_NAME}",
+                          "{#E2_NODE_RC_ACTION_2_PRM_ITEM_NAME}"
+                      ];
+                  
+                      // Lista de Contadores
+                      var rc_counters = [
+                          "{#E2_NODE_RC_RPT_STYLES_COUNT}",
+                          "{#E2_NODE_RC_CTL_STYLES_COUNT}"
+                      ];
+                  
+                      // Loop principal
+                      obj.data.forEach(function(node) {
+                          
+                          // 1. Tratamento dos IDs numéricos (SMs)
+                          optional_ids.forEach(function(id) {
+                              var key_id = "{#E2_NODE_SM_ID_" + id + "}";
+                              var key_name = "{#E2_NODE_SM_NAME_" + id + "}";
+                              var key_oid = "{#E2_NODE_SM_OID_" + id + "}";
+                  
+                              if (!node.hasOwnProperty(key_id)) {
+                                  node[key_id] = "-1";
+                                  node[key_name] = "Disabled";
+                                  node[key_oid] = "0.0.0.0";
+                              }
+                          });
+                  
+                          // 2. Tratamento das Strings/Textos do RC
+                          rc_macros.forEach(function(macro) {
+                              if (!node.hasOwnProperty(macro)) {
+                                  node[macro] = "-1"; 
+                              }
+                          });
+                  
+                          // 3. Tratamento dos Contadores do RC
+                          rc_counters.forEach(function(counter) {
+                              if (!node.hasOwnProperty(counter)) {
+                                  node[counter] = "0";
+                              }
+                          });
+                      });
+                  
+                      // Retorna o JSON tratado
+                      return JSON.stringify(obj);
+                  
+                  } catch (error) {
+                      // Se der erro, retorna um JSON de erro para vermos no log o que houve
+                      // Isso ajuda a descobrir se foi erro de sintaxe ou dado inválido
+                      var errObj = {
+                          "error": "Preprocessing Script Failed",
+                          "details": error.toString(),
+                          "original_data_sample": value.substring(0, 50) + "..."
+                      };
+                      return JSON.stringify(errObj);
+                  }
+          overrides:
+            - name: 'Disable RC items if missing'
+              step: '1'
+              filter:
+                conditions:
+                  - macro: '{#E2_NODE_SM_ID_3}'
+                    value: ^-1$
+                    formulaid: A
+              operations:
+                - operationobject: ITEM_PROTOTYPE
+                  value: '{#E2_NODE_SM_NAME_3}'
+                  discover: NO_DISCOVER
+                - operationobject: ITEM_PROTOTYPE
+                  operator: LIKE
+                  value: '.*'
+                  discover: NO_DISCOVER
+            - name: 'Disable KPM items if missing'
+              step: '2'
+              filter:
+                conditions:
+                  - macro: '{#E2_NODE_SM_ID_2}'
+                    value: ^-1$
+                    formulaid: A
+              operations:
+                - operationobject: ITEM_PROTOTYPE
+                  value: '{#E2_NODE_SM_NAME_2}'
+                  discover: NO_DISCOVER
+                - operationobject: ITEM_PROTOTYPE
+                  operator: LIKE
+                  value: '.*'
+                  discover: NO_DISCOVER
+            - name: 'Disable MAC items if missing'
+              step: '3'
+              filter:
+                conditions:
+                  - macro: '{#E2_NODE_SM_ID_142}'
+                    value: ^-1$
+                    formulaid: A
+              operations:
+                - operationobject: ITEM_PROTOTYPE
+                  value: '{#E2_NODE_SM_NAME_142}'
+                  discover: NO_DISCOVER
+                - operationobject: ITEM_PROTOTYPE
+                  operator: LIKE
+                  value: '.*'
+                  discover: NO_DISCOVER
+            - name: 'Disable RLC items if missing'
+              step: '4'
+              filter:
+                conditions:
+                  - macro: '{#E2_NODE_SM_ID_143}'
+                    value: ^-1$
+                    formulaid: A
+              operations:
+                - operationobject: ITEM_PROTOTYPE
+                  value: '{#E2_NODE_SM_NAME_143}'
+                  discover: NO_DISCOVER
+                - operationobject: ITEM_PROTOTYPE
+                  operator: LIKE
+                  value: '.*'
+                  discover: NO_DISCOVER
+            - name: 'Disable PDCP items if missing'
+              step: '5'
+              filter:
+                conditions:
+                  - macro: '{#E2_NODE_SM_ID_144}'
+                    value: ^-1$
+                    formulaid: A
+                  - macro: '{#E2_NODE_SM_OID_144}'
+                    value: ^0.0.0.0$
+                    formulaid: B
+              operations:
+                - operationobject: ITEM_PROTOTYPE
+                  operator: LIKE
+                  value: '.*'
+                  discover: NO_DISCOVER
+                - operationobject: ITEM_PROTOTYPE
+                  operator: LIKE
+                  value: '{#E2_NODE_SM_NAME_144}'
+                  discover: NO_DISCOVER
+                - operationobject: ITEM_PROTOTYPE
+                  operator: LIKE
+                  value: '{#E2_NODE_SM_OID_144}'
+                  discover: NO_DISCOVER
+            - name: 'Disable SLICE items if missing'
+              step: '6'
+              filter:
+                conditions:
+                  - macro: '{#E2_NODE_SM_ID_145}'
+                    value: ^-1$
+                    formulaid: A
+              operations:
+                - operationobject: ITEM_PROTOTYPE
+                  value: '{#E2_NODE_SM_NAME_145}'
+                  discover: NO_DISCOVER
+                - operationobject: ITEM_PROTOTYPE
+                  operator: LIKE
+                  value: '.*'
+                  discover: NO_DISCOVER
+            - name: 'Disable TC items if missing'
+              step: '7'
+              filter:
+                conditions:
+                  - macro: '{#E2_NODE_SM_ID_146}'
+                    value: ^-1$
+                    formulaid: A
+              operations:
+                - operationobject: ITEM_PROTOTYPE
+                  value: '{#E2_NODE_SM_NAME_146}'
+                  discover: NO_DISCOVER
+                - operationobject: ITEM_PROTOTYPE
+                  operator: LIKE
+                  value: '.*'
+                  discover: NO_DISCOVER
+            - name: 'Disable GTP items if missing'
+              step: '8'
+              filter:
+                conditions:
+                  - macro: '{#E2_NODE_SM_ID_148}'
+                    value: ^-1$
+                    formulaid: A
+              operations:
+                - operationobject: ITEM_PROTOTYPE
+                  operator: LIKE
+                  value: '.*'
+                  discover: NO_DISCOVER
+                - operationobject: ITEM_PROTOTYPE
+                  operator: LIKE
+                  value: '{#E2_NODE_SM_NAME_148}'
+                  discover: NO_DISCOVER
+        - uuid: 9085c087226142dcb92a718827bdb3ad
+          name: 'Discovery E2SMs Flexric'
+          key: srs.flexric.SM
+          delay: 1h
+          item_prototypes:
+            - uuid: 1bed7c42739e4bb09bc3f2ff4326a2ce
+              name: 'Flexric: GIT Branch'
+              type: CALCULATED
+              key: 'srs.flexric.SM[{#NEAR_RT_RIC_BRANCH}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#NEAR_RT_RIC_BRANCH}'
+              tags:
+                - tag: RIC
+                  value: 'flexric - SM'
+            - uuid: b18ac44453fc4d678637b62bd27965ba
+              name: 'Flexric: Database nearRT-RIC'
+              type: CALCULATED
+              key: 'srs.flexric.SM[{#NEAR_RT_RIC_DB}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#NEAR_RT_RIC_DB}'
+              tags:
+                - tag: RIC
+                  value: 'flexric - SM'
+            - uuid: 93c5cb46090848b0aaf8a0bd6839d3e6
+              name: 'Flexric: E2AP Version'
+              type: CALCULATED
+              key: 'srs.flexric.SM[{#NEAR_RT_RIC_E2AP}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#NEAR_RT_RIC_E2AP}'
+              tags:
+                - tag: RIC
+                  value: 'flexric - SM'
+            - uuid: 2e1a13aaefed4265866aeb7c47fbd419
+              name: 'Flexric: IP nearRT-RIC'
+              type: CALCULATED
+              key: 'srs.flexric.SM[{#NEAR_RT_RIC_IP}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#NEAR_RT_RIC_IP}'
+              tags:
+                - tag: RIC
+                  value: 'flexric - SM'
+            - uuid: d3767c7d7b034a99844c1bd804750bda
+              name: 'Flexric: Total E2 Nodes'
+              type: CALCULATED
+              key: 'srs.flexric.SM[{#NEAR_RT_RIC_NODES}]'
+              params: '{#NEAR_RT_RIC_NODES}'
+              tags:
+                - tag: RIC
+                  value: 'flexric - SM'
+            - uuid: 16e8f92467c64b3090c0f685035f3e89
+              name: 'Flexric: Port'
+              type: CALCULATED
+              key: 'srs.flexric.SM[{#NEAR_RT_RIC_PORT}]'
+              params: '{#NEAR_RT_RIC_PORT}'
+              tags:
+                - tag: RIC
+                  value: 'flexric - SM'
+            - uuid: 01b44fa4bd2346419920e807afabf978
+              name: 'Service Model: SM ID 2 - {#NEAR_RT_RIC_SM_ID_2}'
+              type: CALCULATED
+              key: 'srs.flexric.SM[{#NEAR_RT_RIC_SM_ID_2}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#NEAR_RT_RIC_SM_ID_2}'
+              tags:
+                - tag: RIC
+                  value: 'flexric - SM'
+            - uuid: dc3464164bd24ae69ce1ac210df0a0da
+              name: 'Service Model: SM ID 3 - {#NEAR_RT_RIC_SM_ID_3}'
+              type: CALCULATED
+              key: 'srs.flexric.SM[{#NEAR_RT_RIC_SM_ID_3}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#NEAR_RT_RIC_SM_ID_3}'
+              tags:
+                - tag: RIC
+                  value: 'flexric - SM'
+            - uuid: d07b426fbeae48ba800e7e2947ab817f
+              name: 'Service Model: SM ID 142 - {#NEAR_RT_RIC_SM_ID_142}'
+              type: CALCULATED
+              key: 'srs.flexric.SM[{#NEAR_RT_RIC_SM_ID_142}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#NEAR_RT_RIC_SM_ID_142}'
+              tags:
+                - tag: RIC
+                  value: 'flexric - SM'
+            - uuid: ad15603446704df1be2204f549de00e3
+              name: 'Service Model: SM ID 143 - {#NEAR_RT_RIC_SM_ID_143}'
+              type: CALCULATED
+              key: 'srs.flexric.SM[{#NEAR_RT_RIC_SM_ID_143}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#NEAR_RT_RIC_SM_ID_143}'
+              tags:
+                - tag: RIC
+                  value: 'flexric - SM'
+            - uuid: b5626df2f80b46b5b3fe4089756361f6
+              name: 'Service Model: SM ID 144 - {#NEAR_RT_RIC_SM_ID_144}'
+              type: CALCULATED
+              key: 'srs.flexric.SM[{#NEAR_RT_RIC_SM_ID_144}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#NEAR_RT_RIC_SM_ID_144}'
+              tags:
+                - tag: RIC
+                  value: 'flexric - SM'
+            - uuid: 3fc50475c9ab4feb93931659ff9c5a9c
+              name: 'Service Model: SM ID 146 - {#NEAR_RT_RIC_SM_ID_145}'
+              type: CALCULATED
+              key: 'srs.flexric.SM[{#NEAR_RT_RIC_SM_ID_145}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#NEAR_RT_RIC_SM_ID_145}'
+              tags:
+                - tag: RIC
+                  value: 'flexric - SM'
+            - uuid: 4101ed47074f4565822f00426411d10b
+              name: 'Service Model: SM ID 146 - {#NEAR_RT_RIC_SM_ID_146}'
+              type: CALCULATED
+              key: 'srs.flexric.SM[{#NEAR_RT_RIC_SM_ID_146}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#NEAR_RT_RIC_SM_ID_146}'
+              tags:
+                - tag: RIC
+                  value: 'flexric - SM'
+            - uuid: 99a04245f8c04973a37946a046d726ce
+              name: 'Service Model: SM ID 148 - {#NEAR_RT_RIC_SM_ID_148}'
+              type: CALCULATED
+              key: 'srs.flexric.SM[{#NEAR_RT_RIC_SM_ID_148}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#NEAR_RT_RIC_SM_ID_148}'
+              tags:
+                - tag: RIC
+                  value: 'flexric - SM'
+      macros:
+        - macro: '{$NAME}'
+          value: '{HOST.NAME}'

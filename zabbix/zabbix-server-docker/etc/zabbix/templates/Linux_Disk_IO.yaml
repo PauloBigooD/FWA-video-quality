@@ -1,0 +1,261 @@
+zabbix_export:
+  version: '7.0'
+  template_groups:
+    - uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    - uuid: 19c638e2dbac48fe9bc9819aec7a038d
+      template: 'Template Linux Disk IO'
+      name: 'Template Linux Disk IO'
+      groups:
+        - name: Templates
+      discovery_rules:
+        - uuid: 7fc088cbcc9f49e5a3429e7cbc02a873
+          name: 'Disk device discovery'
+          key: custom.vfs.dev.discovery
+          delay: '60'
+          filter:
+            conditions:
+              - macro: '{#DISK}'
+                value: '@Disk devices for discovery'
+                formulaid: A
+          lifetime: 30d
+          enabled_lifetime_type: DISABLE_NEVER
+          description: 'Discovery of disk devices on Linux'
+          item_prototypes:
+            - uuid: b9b42d0f35d44003b9d0cf2b2e16ee04
+              name: 'Disk:{#DISK}:I/O''s currently in progress'
+              key: 'custom.vfs.dev.io.active[{#DISK}]'
+              delay: '60'
+              history: 30d
+              trends: 90d
+              units: iops
+              tags:
+                - tag: Application
+                  value: 'I/O Stats'
+            - uuid: db55d64e410142739b0df70791641fbd
+              name: 'Disk:{#DISK}:time spent doing I/O'
+              key: 'custom.vfs.dev.io.ms[{#DISK}]'
+              delay: '60'
+              history: 30d
+              trends: 90d
+              units: ms
+              tags:
+                - tag: Application
+                  value: 'I/O Stats'
+            - uuid: 7fb072c788344954bbb4c6396e2d52f9
+              name: 'Disk:{#DISK}:time spent reading'
+              key: 'custom.vfs.dev.read.ms[{#DISK}]'
+              delay: '60'
+              history: 30d
+              trends: 90d
+              units: ms
+              tags:
+                - tag: Application
+                  value: 'I/O Stats'
+            - uuid: f8458a1058994386bc33a23e9fbe2d29
+              name: 'Disk:{#DISK}:completed reads per second'
+              key: 'custom.vfs.dev.read.ops[{#DISK}]'
+              delay: '60'
+              history: 30d
+              trends: 90d
+              units: Reads/sec
+              preprocessing:
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              tags:
+                - tag: Application
+                  value: 'I/O Stats'
+            - uuid: 506d557435ef4e48892ad04111cebd6b
+              name: 'Disk:{#DISK}:sectors read per second'
+              key: 'custom.vfs.dev.read.sectors[{#DISK}]'
+              delay: '60'
+              history: 30d
+              trends: 90d
+              units: Reads/sec
+              preprocessing:
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              tags:
+                - tag: Application
+                  value: 'I/O Stats'
+            - uuid: 75f6ab66f63b4629994996652fbe645d
+              name: 'Disk:{#DISK}:time spent writing'
+              key: 'custom.vfs.dev.write.ms[{#DISK}]'
+              delay: '60'
+              history: 30d
+              trends: 90d
+              units: ms
+              tags:
+                - tag: Application
+                  value: 'I/O Stats'
+            - uuid: bf00f6e9ad5f4956b0761b12fa6c2704
+              name: 'Disk:{#DISK}:completed writes per second'
+              key: 'custom.vfs.dev.write.ops[{#DISK}]'
+              delay: '60'
+              history: 30d
+              trends: 90d
+              units: Writes/sec
+              preprocessing:
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              tags:
+                - tag: Application
+                  value: 'I/O Stats'
+            - uuid: 967922f31540422aa846e4deb06de04b
+              name: 'Disk:{#DISK}:sectors written per second'
+              key: 'custom.vfs.dev.write.sectors[{#DISK}]'
+              delay: '60'
+              history: 30d
+              trends: 90d
+              units: Writes/sec
+              preprocessing:
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+              tags:
+                - tag: Application
+                  value: 'I/O Stats'
+    - uuid: f0c9da1988b34f0b930422656a06ceed
+      template: 'Template Linux Disk IO-active'
+      name: 'Template Linux Disk IO-active'
+      groups:
+        - name: Templates
+      discovery_rules:
+        - uuid: e92d47d585d74d62b1d5de6303916d6d
+          name: 'Disk device discovery'
+          type: ZABBIX_ACTIVE
+          key: custom.vfs.dev.discovery
+          delay: '60'
+          filter:
+            conditions:
+              - macro: '{#DISK}'
+                value: '@Disk devices for discovery'
+                formulaid: A
+          lifetime: 30d
+          enabled_lifetime_type: DISABLE_NEVER
+          description: 'Discovery of disk devices on Linux'
+          item_prototypes:
+            - uuid: 505510093e8b4f95b21aae46eccc7784
+              name: 'Disk:{#DISK}:I/O''s currently in progress'
+              type: ZABBIX_ACTIVE
+              key: 'custom.vfs.dev.io.active[{#DISK}]'
+              delay: '60'
+              history: 30d
+              trends: 90d
+              units: iops
+              preprocessing:
+                - type: SIMPLE_CHANGE
+                  parameters:
+                    - ''
+              tags:
+                - tag: Application
+                  value: 'I/O Stats'
+            - uuid: 33813d49ba58422985ed600a8bcea637
+              name: 'Disk:{#DISK}:time spent doing I/O'
+              type: ZABBIX_ACTIVE
+              key: 'custom.vfs.dev.io.ms[{#DISK}]'
+              delay: '60'
+              history: 30d
+              trends: 90d
+              units: ms
+              preprocessing:
+                - type: SIMPLE_CHANGE
+                  parameters:
+                    - ''
+              tags:
+                - tag: Application
+                  value: 'I/O Stats'
+            - uuid: abfe021106194b14a84ed9dfd87da91d
+              name: 'Disk:{#DISK}:time spent reading'
+              type: ZABBIX_ACTIVE
+              key: 'custom.vfs.dev.read.ms[{#DISK}]'
+              delay: '60'
+              history: 30d
+              trends: 90d
+              units: ms
+              preprocessing:
+                - type: SIMPLE_CHANGE
+                  parameters:
+                    - ''
+              tags:
+                - tag: Application
+                  value: 'I/O Stats'
+            - uuid: 0f468334f9174c2a9e442dec6b133df1
+              name: 'Disk:{#DISK}:completed reads per second'
+              type: ZABBIX_ACTIVE
+              key: 'custom.vfs.dev.read.ops[{#DISK}]'
+              delay: '60'
+              history: 30d
+              trends: 90d
+              units: Reads/sec
+              preprocessing:
+                - type: SIMPLE_CHANGE
+                  parameters:
+                    - ''
+              tags:
+                - tag: Application
+                  value: 'I/O Stats'
+            - uuid: 615738dced6f40979dd73362dcb103a9
+              name: 'Disk:{#DISK}:sectors read per second'
+              type: ZABBIX_ACTIVE
+              key: 'custom.vfs.dev.read.sectors[{#DISK}]'
+              delay: '60'
+              history: 30d
+              trends: 90d
+              units: Reads/sec
+              preprocessing:
+                - type: SIMPLE_CHANGE
+                  parameters:
+                    - ''
+              tags:
+                - tag: Application
+                  value: 'I/O Stats'
+            - uuid: 8831cfafc77c438789473e1415fd15f3
+              name: 'Disk:{#DISK}:time spent writing'
+              type: ZABBIX_ACTIVE
+              key: 'custom.vfs.dev.write.ms[{#DISK}]'
+              delay: '60'
+              history: 30d
+              trends: 90d
+              units: ms
+              preprocessing:
+                - type: SIMPLE_CHANGE
+                  parameters:
+                    - ''
+              tags:
+                - tag: Application
+                  value: 'I/O Stats'
+            - uuid: 69c753d7fb4b4af29a7673b05b57bdbe
+              name: 'Disk:{#DISK}:completed writes per second'
+              type: ZABBIX_ACTIVE
+              key: 'custom.vfs.dev.write.ops[{#DISK}]'
+              delay: '60'
+              history: 30d
+              trends: 90d
+              units: Writes/sec
+              preprocessing:
+                - type: SIMPLE_CHANGE
+                  parameters:
+                    - ''
+              tags:
+                - tag: Application
+                  value: 'I/O Stats'
+            - uuid: 4de6a7c28b314bdd91125f687b2b083a
+              name: 'Disk:{#DISK}:sectors written per second'
+              type: ZABBIX_ACTIVE
+              key: 'custom.vfs.dev.write.sectors[{#DISK}]'
+              delay: '60'
+              history: 30d
+              trends: 90d
+              units: Writes/sec
+              preprocessing:
+                - type: SIMPLE_CHANGE
+                  parameters:
+                    - ''
+              tags:
+                - tag: Application
+                  value: 'I/O Stats'

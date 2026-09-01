@@ -1,0 +1,16 @@
+FROM python:3.11-slim
+
+# Instalando dependências para os scripts shell
+RUN apt-get update && \
+    apt-get install -y bash curl jq && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Instalando requests (já incluso no entrypoint atual)
+RUN pip install requests
+
+# Diretório de trabalho
+WORKDIR /importer
+
+# Entrypoint padrão (você pode sobrescrever no docker-compose)
+ENTRYPOINT ["bash"]
+

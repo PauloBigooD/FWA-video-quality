@@ -1,0 +1,30 @@
+zabbix_export:
+  version: '7.0'
+  template_groups:
+    - uuid: 5ad9e0e19e164336a2b9230941cd08d8
+      name: RIC
+    - uuid: 07c028322d7c4e2180510b9d762b970f
+      name: srsRAN
+  templates:
+    - uuid: 2df557ee6188437cb7f07c701ef65aa4
+      template: 'O-RAN 5G monitoring - FlexRIC info'
+      name: 'O-RAN 5G monitoring - FlexRIC info'
+      groups:
+        - name: RIC
+        - name: srsRAN
+      items:
+        - uuid: 3e6df21138b14c8d849040e25fea255c
+          name: 'CPU FlexRIC'
+          key: 'proc.cpu.util[nearRT-RIC]'
+          value_type: FLOAT
+          units: '%'
+          tags:
+            - tag: RIC
+              value: NearRT-RIC
+        - uuid: 7a186644d7a24d2ab0a603b64fa15667
+          name: 'Memory FlexRIC'
+          key: 'proc.mem[nearRT-RIC]'
+          units: B
+          tags:
+            - tag: RIC
+              value: NearRT-RIC

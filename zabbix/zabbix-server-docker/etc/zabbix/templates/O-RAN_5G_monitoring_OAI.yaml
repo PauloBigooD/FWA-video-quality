@@ -1,0 +1,702 @@
+zabbix_export:
+  version: '7.4'
+  template_groups:
+    - uuid: 97a68167285e42e8bc2311659a130334
+      name: oai
+  templates:
+    - uuid: be00140b09144bc48a3ad842e22094a0
+      template: 'O-RAN 5G monitoring - OAI'
+      name: 'O-RAN 5G monitoring - OAI'
+      groups:
+        - name: oai
+      items:
+        - uuid: 53a3180dca8b42f7b98ca948908f33de
+          name: 'CPU gNB'
+          key: 'proc.cpu.util[nr-softmodem]'
+          delay: 3s
+          history: 1d
+          value_type: FLOAT
+          trends: '0'
+          units: '%'
+          tags:
+            - tag: oai
+              value: gNB
+        - uuid: 60a0c45561d8453ab167ab0f545e21a4
+          name: 'Memória gNB'
+          key: 'proc.mem[nr-softmodem]'
+          delay: 3s
+          history: 1d
+          trends: '0'
+          units: B
+          tags:
+            - tag: oai
+              value: gNB
+      discovery_rules:
+        - uuid: 8262721772324926b2243949f02f459d
+          name: 'Discovery AMF gNB'
+          key: oai.amf.gnb
+          lifetime_type: DELETE_IMMEDIATELY
+          item_prototypes:
+            - uuid: 8b5a1c8446d047828dc90e88c54ccf08
+              name: '{#GNB_NAME}: ID'
+              type: CALCULATED
+              key: 'oai.amf.gnb[{#GNB_NAME}, {#GNB_ID}]'
+              history: 1d
+              value_type: TEXT
+              params: '{#GNB_ID}'
+              tags:
+                - tag: oai
+                  value: 'amf - gNB'
+            - uuid: aceaf546c7464f829b8f6617358a63c5
+              name: '{#GNB_NAME}: Index'
+              type: CALCULATED
+              key: 'oai.amf.gnb[{#GNB_NAME}, {#GNB_INDEX}]'
+              history: 1d
+              trends: '0'
+              params: '{#GNB_INDEX}'
+              tags:
+                - tag: oai
+                  value: 'amf - gNB'
+            - uuid: 5816db276b0341c99f72690fd6cb7247
+              name: '{#GNB_NAME}: PLMN'
+              type: CALCULATED
+              key: 'oai.amf.gnb[{#GNB_NAME}, {#GNB_PLMN}]'
+              history: 1d
+              value_type: TEXT
+              params: '{#GNB_PLMN}'
+              tags:
+                - tag: oai
+                  value: 'amf - gNB'
+            - uuid: d4aad865f7e1461c9abae5aaccf3171b
+              name: '{#GNB_NAME}: Status'
+              type: CALCULATED
+              key: 'oai.amf.gnb[{#GNB_NAME}, {#GNB_STATUS}]'
+              history: 1d
+              trends: '0'
+              params: '{#GNB_STATUS}'
+              preprocessing:
+                - type: STR_REPLACE
+                  parameters:
+                    - Connected
+                    - '1'
+                - type: STR_REPLACE
+                  parameters:
+                    - Disconected
+                    - '0'
+              tags:
+                - tag: oai
+                  value: 'amf - gNB'
+            - uuid: cb60ef7796d84e2cab4880638f50e4db
+              name: '{#GNB_NAME}: Name'
+              type: CALCULATED
+              key: 'oai.amf.gnb[{#GNB_NAME}]'
+              history: 1d
+              value_type: TEXT
+              params: '{#GNB_NAME}'
+              tags:
+                - tag: oai
+                  value: 'amf - gNB'
+        - uuid: 56a9c501f4b143b1b75cf8807425af29
+          name: 'Discovery AMF UE'
+          key: oai.amf.ue
+          lifetime_type: DELETE_IMMEDIATELY
+          item_prototypes:
+            - uuid: f36bf8857a8147e880bb28773f31450d
+              name: 'UE {#UE_IMSI}: Status'
+              type: CALCULATED
+              key: 'oai.amf.ue[{#UE_5GMM}, {#UE_IMSI}]'
+              delay: 30s
+              history: 1d
+              value_type: FLOAT
+              trends: '0'
+              params: '{#UE_5GMM}'
+              preprocessing:
+                - type: STR_REPLACE
+                  parameters:
+                    - 5GMM-REGISTERED
+                    - '1'
+                - type: STR_REPLACE
+                  parameters:
+                    - 5GMM-DEREGISTERED
+                    - '2'
+              tags:
+                - tag: oai
+                  value: 'amf - ue'
+            - uuid: 1012543d70db480aa9425a5c4578085c
+              name: 'UE {#UE_IMSI}: Cell ID'
+              type: CALCULATED
+              key: 'oai.amf.ue[{#UE_CELL_ID}, {#UE_IMSI}]'
+              delay: 5m
+              history: 1d
+              trends: '0'
+              params: '{#UE_CELL_ID}'
+              tags:
+                - tag: oai
+                  value: 'amf - ue'
+            - uuid: ec5ba8a82b884f7eb4bdeaae0d15a818
+              name: 'UE {#UE_IMSI}: ID AMF'
+              type: CALCULATED
+              key: 'oai.amf.ue[{#UE_IMSI},{#UE_AMF_ID}]'
+              delay: 5m
+              history: 1d
+              trends: '0'
+              params: '{#UE_AMF_ID}'
+              tags:
+                - tag: oai
+                  value: 'amf - ue'
+            - uuid: 31e8868f0c1d469e88fab667828ccdcd
+              name: 'UE {#UE_IMSI}: IMSI'
+              type: CALCULATED
+              key: 'oai.amf.ue[{#UE_IMSI}, {#UE_IMSI}]'
+              delay: 5m
+              history: 1d
+              value_type: FLOAT
+              trends: '0'
+              params: '{#UE_IMSI}'
+              tags:
+                - tag: oai
+                  value: 'amf - ue'
+            - uuid: 2e6593e53aa644f88c111c44efcd5cf1
+              name: 'UE  {#UE_IMSI}: Index'
+              type: CALCULATED
+              key: 'oai.amf.ue[{#UE_INDEX}, {#UE_IMSI}]'
+              delay: 5m
+              history: 1d
+              trends: '0'
+              params: '{#UE_INDEX}'
+              tags:
+                - tag: oai
+                  value: 'amf - ue'
+            - uuid: f527d788c3854e18b84734cdd3781eb0
+              name: 'UE {#UE_IMSI}: PLMN'
+              type: CALCULATED
+              key: 'oai.amf.ue[{#UE_PLMN}, {#UE_IMSI}]'
+              delay: 5m
+              history: 1d
+              value_type: TEXT
+              params: '{#UE_PLMN}'
+              tags:
+                - tag: oai
+                  value: 'amf - ue'
+        - uuid: b6e516f55e8b455882af683467377733
+          name: 'Discovery RRC gNB'
+          key: 'oai.gnb.kpi[{$NRRRC}]'
+          delay: 10s
+          lifetime: 1d
+          item_prototypes:
+            - uuid: ad76d9e16f494f30ac31717d3630baa7
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: CPU gNB'
+              type: DEPENDENT
+              key: 'cpu.gNB[{#GNB_AMF_DU_ID}]'
+              history: 1d
+              value_type: FLOAT
+              trends: '0'
+              units: '%'
+              master_item:
+                key: 'proc.cpu.util[nr-softmodem]'
+              tags:
+                - tag: oai
+                  value: 'rrc - gNB'
+            - uuid: d75c901a5e244bec8112d6b7a7dbd668
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: Memória gNB'
+              type: DEPENDENT
+              key: 'mem.gNB[{#GNB_AMF_DU_ID}]'
+              history: 1d
+              value_type: FLOAT
+              trends: '0'
+              units: B
+              master_item:
+                key: 'proc.mem[nr-softmodem]'
+              tags:
+                - tag: oai
+                  value: 'rrc - gNB'
+            - uuid: 7c041e4a41a74399bf2a9eb0f223c20e
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: AMF_DU_ID'
+              type: CALCULATED
+              key: 'oai.gnb.kpi[{#GNB_NAME}, {#GNB_AMF_DU_ID}]'
+              history: 1d
+              trends: '0'
+              params: '{#GNB_AMF_DU_ID}'
+              tags:
+                - tag: oai
+                  value: 'rrc - gNB'
+            - uuid: ae03c184777c4f2e9c857a51c4c91a77
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: Band'
+              type: CALCULATED
+              key: 'oai.gnb.kpi[{#GNB_NAME}, {#GNB_BAND}]'
+              history: 1d
+              trends: '0'
+              params: '{#GNB_BAND}'
+              tags:
+                - tag: oai
+                  value: 'rrc - gNB'
+            - uuid: 9bfaad3fde114dca8fe259291aa36086
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: nr_Cell_ID'
+              type: CALCULATED
+              key: 'oai.gnb.kpi[{#GNB_NAME}, {#GNB_NRCELLID}]'
+              history: 1d
+              trends: '0'
+              params: '{#GNB_NRCELLID}'
+              tags:
+                - tag: oai
+                  value: 'rrc - gNB'
+            - uuid: a53f426149354a6e92d6736b0124b665
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID} PCI'
+              type: CALCULATED
+              key: 'oai.gnb.kpi[{#GNB_NAME}, {#GNB_PCI}]'
+              history: 1d
+              trends: '0'
+              params: '{#GNB_PCI}'
+              tags:
+                - tag: oai
+                  value: 'rrc - gNB'
+            - uuid: 2d4b908573b04915a84434256ea41930
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: PRB'
+              type: CALCULATED
+              key: 'oai.gnb.kpi[{#GNB_NAME}, {#GNB_PRB}]'
+              history: 1d
+              trends: '0'
+              units: 'PRB''s'
+              params: '{#GNB_PRB}'
+              tags:
+                - tag: oai
+                  value: 'rrc - gNB'
+            - uuid: 5f170e2f6a5d45108fc2cbc5d621b1dc
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: SCS'
+              type: CALCULATED
+              key: 'oai.gnb.kpi[{#GNB_NAME}, {#GNB_SCS}]'
+              history: 1d
+              trends: '0'
+              units: kHz
+              params: '{#GNB_SCS}'
+              tags:
+                - tag: oai
+                  value: 'rrc - gNB'
+            - uuid: e387bc47839a4b198a996ffdcb521aac
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: SSB_ARFCN'
+              type: CALCULATED
+              key: 'oai.gnb.kpi[{#GNB_NAME}, {#GNB_SSB_ARFCN}]'
+              history: 1d
+              trends: '0'
+              params: '{#GNB_SSB_ARFCN}'
+              tags:
+                - tag: oai
+                  value: 'rrc - gNB'
+            - uuid: ed2e6230070b453ebb3829e423c775f8
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: Name'
+              type: CALCULATED
+              key: 'oai.gnb.kpi[{#GNB_NAME}]'
+              history: 1d
+              value_type: TEXT
+              params: '{#GNB_NAME}'
+              tags:
+                - tag: oai
+                  value: 'rrc - gNB'
+        - uuid: 2520f7972b104f98b16521a5abc36626
+          name: 'Discovery SMF UE'
+          key: oai.smf.ue
+          delay: 10s
+          lifetime_type: DELETE_IMMEDIATELY
+          item_prototypes:
+            - uuid: 654f20eb13e44650a5a843fc52d204e5
+              name: 'UE {#SUPI}: SD'
+              type: CALCULATED
+              key: 'oai.smf.ue[{#SUPI}, SD:{#SD}]'
+              history: 1d
+              trends: '0'
+              params: '{#SD}'
+              tags:
+                - tag: oai
+                  value: 'smf - ue'
+            - uuid: 695ad4dd26a54de0bf82bd709c925cc0
+              name: 'UE {#SUPI}: SST'
+              type: CALCULATED
+              key: 'oai.smf.ue[{#SUPI}, SST:{#SST}]'
+              history: 1d
+              trends: '0'
+              params: '{#SST}'
+              tags:
+                - tag: oai
+                  value: 'smf - ue'
+            - uuid: 1a92402e919540269a56b3bc58cf9a89
+              name: 'UE {#SUPI}: DL gNB IP'
+              type: CALCULATED
+              key: 'oai.smf.ue[{#SUPI}, {#DL_GNB_IP}]'
+              history: 1d
+              value_type: TEXT
+              params: '{#DL_GNB_IP}'
+              tags:
+                - tag: oai
+                  value: 'smf - ue'
+            - uuid: dc87bc4641bd4676bb25dc7ecb8c195c
+              name: 'UE {#SUPI}: DNN'
+              type: CALCULATED
+              key: 'oai.smf.ue[{#SUPI}, {#DNN}]'
+              history: 1d
+              value_type: TEXT
+              params: '{#DNN}'
+              tags:
+                - tag: oai
+                  value: 'smf - ue'
+            - uuid: 7f3d021a0cef4b839cd3b30ee37b4b35
+              name: 'UE {#SUPI}: IMEI'
+              type: CALCULATED
+              key: 'oai.smf.ue[{#SUPI}, {#IMEI}]'
+              history: 1d
+              trends: '0'
+              status: DISABLED
+              discover: NO_DISCOVER
+              params: '{#IMEI}'
+              tags:
+                - tag: oai
+                  value: 'smf - ue'
+            - uuid: f2b48d1cb5264d46be1cf569748f00ef
+              name: 'UE {#SUPI}: PDN Type'
+              type: CALCULATED
+              key: 'oai.smf.ue[{#SUPI}, {#PDN_TYPE}]'
+              history: 1d
+              value_type: TEXT
+              params: '{#PDN_TYPE}'
+              tags:
+                - tag: oai
+                  value: 'smf - ue'
+            - uuid: 74d3e508abc54166a46d78d4678fdb8a
+              name: 'UE {#SUPI}: PDU SESSION ID'
+              type: CALCULATED
+              key: 'oai.smf.ue[{#SUPI}, {#PDU_SESSION_ID}]'
+              history: 1d
+              value_type: FLOAT
+              trends: '0'
+              params: '{#PDU_SESSION_ID}'
+              tags:
+                - tag: oai
+                  value: 'smf - ue'
+            - uuid: d507aea5465b460088ae3b57b278524c
+              name: 'UE {#SUPI}: QFI'
+              type: CALCULATED
+              key: 'oai.smf.ue[{#SUPI}, {#QFI}]'
+              history: 1d
+              trends: '0'
+              params: '{#QFI}'
+              tags:
+                - tag: oai
+                  value: 'smf - ue'
+            - uuid: 84e47bbe804e478aadb6c7d7620e1735
+              name: 'UE {#SUPI}: IP'
+              type: CALCULATED
+              key: 'oai.smf.ue[{#SUPI}, {#UE_IPV4}]'
+              history: 1d
+              value_type: TEXT
+              params: '{#UE_IPV4}'
+              tags:
+                - tag: oai
+                  value: 'smf - ue'
+            - uuid: 6060514f6f754530b002f32c94cbdf1a
+              name: 'UE {#SUPI}: UL AMF IP'
+              type: CALCULATED
+              key: 'oai.smf.ue[{#SUPI}, {#UL_AMF_IP}]'
+              history: 1d
+              value_type: TEXT
+              params: '{#UL_AMF_IP}'
+              tags:
+                - tag: oai
+                  value: 'smf - ue'
+            - uuid: 18831deb3fbc45a081e026063b92ed9f
+              name: 'UE {#SUPI}: SUPI'
+              type: CALCULATED
+              key: 'oai.smf.ue[{#SUPI}]'
+              history: 1d
+              value_type: TEXT
+              params: '{#SUPI}'
+              tags:
+                - tag: oai
+                  value: 'smf - ue'
+          timeout: 10s
+        - uuid: eefa01f5bc12481080b6f52da5979934
+          name: 'Discovery MAC UE'
+          key: 'oai.ue.kpi.MAC[{$NRMAC}]'
+          delay: 10s
+          lifetime_type: DELETE_IMMEDIATELY
+          item_prototypes:
+            - uuid: cc89189b9f764a56ab2944e92595dc60
+              name: 'UE {#MAC_UE_RNTI}: DL BLER'
+              type: CALCULATED
+              key: 'oai.ue.kpi.MAC.DLBLER[{#MAC_UE_RNTI}]'
+              history: 1d
+              value_type: FLOAT
+              trends: '0'
+              params: '{#MAC_DL_BLER}'
+              tags:
+                - tag: oai
+                  value: 'mac - ue'
+            - uuid: 98fd271db6dc4bce81f223848ea005bc
+              name: 'UE {#MAC_UE_RNTI}: Avarage RSRP'
+              type: CALCULATED
+              key: 'oai.ue.kpi.MAC.RSRP[{#MAC_UE_RNTI}]'
+              delay: 30s
+              history: 1d
+              value_type: FLOAT
+              trends: '0'
+              units: dBm
+              params: '{#MAC_AVG_RSRP}'
+              tags:
+                - tag: oai
+                  value: 'mac - ue'
+            - uuid: a4110938cd074f82bee89a6d58d635f5
+              name: 'UE {#MAC_UE_RNTI}: SNR'
+              type: CALCULATED
+              key: 'oai.ue.kpi.MAC.SNR[{#MAC_UE_RNTI}]'
+              delay: 30s
+              history: 1d
+              value_type: FLOAT
+              trends: '0'
+              units: dB
+              params: '{#MAC_SNR}'
+              tags:
+                - tag: oai
+                  value: 'mac - ue'
+            - uuid: 2cc1c483017747dd8bc1ce0168794f5d
+              name: 'UE {#MAC_UE_RNTI}: UL BLER'
+              type: CALCULATED
+              key: 'oai.ue.kpi.MAC.ULBLER[{#MAC_UE_RNTI}]'
+              history: 1d
+              value_type: FLOAT
+              trends: '0'
+              params: '{#MAC_UL_BLER}'
+              tags:
+                - tag: oai
+                  value: 'mac - ue'
+            - uuid: d6e6152516414742b9698b990b19374f
+              name: 'UE {#MAC_UE_RNTI}: CU UE ID'
+              type: CALCULATED
+              key: 'oai.ue.kpi.MAC[{#MAC_UE_RNTI}, {#CU_UE_ID}]'
+              history: 1d
+              trends: '0'
+              params: '{#MAC_CU_UE_ID}'
+              tags:
+                - tag: oai
+                  value: 'mac - ue'
+            - uuid: 0f6fb435ffe24ede9dca6e768247b2a6
+              name: 'UE {#MAC_UE_RNTI}: LCID 1 RX'
+              type: CALCULATED
+              key: 'oai.ue.kpi.MAC[{#MAC_UE_RNTI}, {#LCID_1_RX}]'
+              history: 1d
+              trends: '0'
+              status: DISABLED
+              discover: NO_DISCOVER
+              params: '{#MAC_LCID_1_RX}'
+              tags:
+                - tag: oai
+                  value: 'mac - ue'
+            - uuid: b122351f73f44816b3e742ef6fc4a553
+              name: 'UE {#MAC_UE_RNTI}: LCID 1 TX'
+              type: CALCULATED
+              key: 'oai.ue.kpi.MAC[{#MAC_UE_RNTI}, {#LCID_1_TX}]'
+              history: 1d
+              trends: '0'
+              status: DISABLED
+              discover: NO_DISCOVER
+              params: '{#MAC_LCID_1_TX}'
+              tags:
+                - tag: oai
+                  value: 'mac - ue'
+            - uuid: 1bcc1ed47baf443198c710ee8a6b76c0
+              name: 'UE {#MAC_UE_RNTI}: LCID 4 RX'
+              type: CALCULATED
+              key: 'oai.ue.kpi.MAC[{#MAC_UE_RNTI}, {#LCID_4_RX}]'
+              history: 1d
+              trends: '0'
+              status: DISABLED
+              discover: NO_DISCOVER
+              params: '{#MAC_LCID_4_RX}'
+              tags:
+                - tag: oai
+                  value: 'mac - ue'
+            - uuid: 356c4efed3ab4e9398381c6d71e005be
+              name: 'UE {#MAC_UE_RNTI}: LCID 4 TX'
+              type: CALCULATED
+              key: 'oai.ue.kpi.MAC[{#MAC_UE_RNTI}, {#LCID_4_TX}]'
+              history: 1d
+              trends: '0'
+              status: DISABLED
+              discover: NO_DISCOVER
+              params: '{#MAC_LCID_4_TX}'
+              tags:
+                - tag: oai
+                  value: 'mac - ue'
+            - uuid: c8aae123ac334c8f8dc2a84e99f92573
+              name: 'UE {#MAC_UE_RNTI}: PCMAX'
+              type: CALCULATED
+              key: 'oai.ue.kpi.MAC[{#MAC_UE_RNTI}, {#MAC_PCMAX}]'
+              history: 1d
+              trends: '0'
+              units: dBm
+              params: '{#MAC_PCMAX}'
+              tags:
+                - tag: oai
+                  value: 'mac - ue'
+            - uuid: a64288a315db4f38a197da26d0621a17
+              name: 'UE {#MAC_UE_RNTI}: MAC RX'
+              type: CALCULATED
+              key: 'oai.ue.kpi.MAC[{#MAC_UE_RNTI}, {#MAC_RX}]'
+              history: 1d
+              value_type: FLOAT
+              trends: '0'
+              units: bytes
+              params: '{#MAC_MAC_RX}'
+              tags:
+                - tag: oai
+                  value: 'mac - ue'
+            - uuid: 281c722b6ff24a8b84ea657932692319
+              name: 'UE {#MAC_UE_RNTI}: MAC TX'
+              type: CALCULATED
+              key: 'oai.ue.kpi.MAC[{#MAC_UE_RNTI}, {#MAC_TX}]'
+              history: 1d
+              value_type: FLOAT
+              trends: '0'
+              units: bytes
+              params: '{#MAC_MAC_TX}'
+              tags:
+                - tag: oai
+                  value: 'mac - ue'
+            - uuid: 1113f803ecc34390a0bcdc666cb81f0c
+              name: 'UE {#MAC_UE_RNTI}: NPRB'
+              type: CALCULATED
+              key: 'oai.ue.kpi.MAC[{#MAC_UE_RNTI}, {#NPRB}]'
+              history: 1d
+              trends: '0'
+              params: '{#MAC_NPRB}'
+              tags:
+                - tag: oai
+                  value: 'mac - ue'
+            - uuid: 7f53db05ee2f4092968f149e140c4863
+              name: 'UE {#MAC_UE_RNTI}: in-sync PH'
+              type: CALCULATED
+              key: 'oai.ue.kpi.MAC[{#MAC_UE_RNTI}, {#PH}]'
+              history: 1d
+              trends: '0'
+              units: dB
+              params: '{#MAC_PH}'
+              tags:
+                - tag: oai
+                  value: 'mac - ue'
+            - uuid: 487d3d7298b542aa941a1640fafd76a7
+              name: 'UE {#MAC_UE_RNTI}: RNTI'
+              type: CALCULATED
+              key: 'oai.ue.kpi.MAC[{#MAC_UE_RNTI}]'
+              history: 1d
+              trends: '0'
+              params: '{#MAC_UE_RNTI}'
+              preprocessing:
+                - type: HEX_TO_DECIMAL
+              tags:
+                - tag: oai
+                  value: 'mac - ue'
+        - uuid: 7dbf994f7bdc4dd2b76ca0b4ee29eb82
+          name: 'Discovery RRC UE'
+          key: 'oai.ue.kpi.RRC[{$NRRRC}]'
+          delay: 10s
+          lifetime_type: DELETE_IMMEDIATELY
+          item_prototypes:
+            - uuid: eed4e7d591434207ae27991b6a802609
+              name: 'UE {#RNTI}: Tempo Conexão'
+              type: CALCULATED
+              key: 'oai.ue.kpi.RRC.ACTIVITY[{#RNTI}]'
+              history: 1d
+              value_type: FLOAT
+              trends: '0'
+              units: s
+              params: '{#RRC_ACTIVITY}'
+              tags:
+                - tag: oai
+                  value: 'rcc - ue'
+            - uuid: 28820199de15449483a82d09229d437d
+              name: 'UE {#RNTI}: RSRP'
+              type: CALCULATED
+              key: 'oai.ue.kpi.RRC.RSRP[{#RNTI}]'
+              delay: 10s
+              history: 1d
+              value_type: FLOAT
+              trends: '0'
+              units: dBm
+              params: '{#RSRP}'
+              tags:
+                - tag: oai
+                  value: 'rcc - ue'
+            - uuid: 89c91eceec414644a7956d27394e4252
+              name: 'UE {#RNTI}: RSRQ'
+              type: CALCULATED
+              key: 'oai.ue.kpi.RRC.RSRQ[{#RNTI}]'
+              delay: 10s
+              history: 1d
+              value_type: FLOAT
+              trends: '0'
+              units: dB
+              params: '{#RSRQ}'
+              tags:
+                - tag: oai
+                  value: 'rcc - ue'
+            - uuid: 834443f55b3f4918893f5d404b2e77f4
+              name: 'UE {#RNTI}: SINR'
+              type: CALCULATED
+              key: 'oai.ue.kpi.RRC.SINR[{#RNTI}]'
+              delay: 10s
+              history: 1d
+              value_type: FLOAT
+              trends: '0'
+              units: dB
+              params: '{#SINR}'
+              tags:
+                - tag: oai
+                  value: 'rcc - ue'
+            - uuid: 56f65af09bdf4480bd2838a28688d19e
+              name: 'UE {#RNTI}: PDU UE ID'
+              type: CALCULATED
+              key: 'oai.ue.kpi.RRC[{#RNTI}, {#PDU_UE_ID}]'
+              history: 1d
+              trends: '0'
+              params: '{#PDU_UE_ID}'
+              tags:
+                - tag: oai
+                  value: 'rcc - ue'
+            - uuid: 4d8fdb40b0754a4aa953c6f5cfad2b97
+              name: 'UE {#RNTI}: DU Type'
+              type: CALCULATED
+              key: 'oai.ue.kpi.RRC[{#RNTI}, {#TYPE_DU}]'
+              history: 1d
+              value_type: TEXT
+              params: '{#TYPE_DU}'
+              tags:
+                - tag: oai
+                  value: 'rcc - ue'
+            - uuid: 119cba23bf654f96b8e83e5a0c78468d
+              name: 'UE {#RNTI}: CU UE ID'
+              type: CALCULATED
+              key: 'oai.ue.kpi.RRC[{#RNTI}, {#UE_CU_UE_ID}]'
+              history: 1d
+              trends: '0'
+              params: '{#CU_UE_ID}'
+              tags:
+                - tag: oai
+                  value: 'rcc - ue'
+            - uuid: ea385791c8e147adac3bca313fe40aa9
+              name: 'UE {#RNTI}: RNTI'
+              type: CALCULATED
+              key: 'oai.ue.kpi.RRC[{#RNTI}]'
+              history: 1d
+              trends: '0'
+              params: '{#RNTI}'
+              preprocessing:
+                - type: HEX_TO_DECIMAL
+              tags:
+                - tag: oai
+                  value: 'rcc - ue'
+      macros:
+        - macro: '{$NAME}'
+          value: '{HOST.NAME}'
+        - macro: '{$NRMAC}'
+          value: path/.../openairinterface5g/cmake_targets/ran_build/build/nrMAC_stats.log
+          description: 'Informe o caminho completo do arquivo nrMAC_stats.log'
+        - macro: '{$NRRRC}'
+          value: path/.../openairinterface5g/cmake_targets/ran_build/build/nrRRC_stats.log
+          description: 'Informe o caminho completo do arquivo nrRRC_stats.log'

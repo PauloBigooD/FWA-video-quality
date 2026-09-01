@@ -1,0 +1,10 @@
+# Ignore generated files
+openairinterface5g
+srsRAN/build
+libzmq/
+mbedtls/
+uhd/
+flexric/
+oran-sc-ric/
+swig/
+zabbix/zabbix-server-docker/var/

@@ -1,0 +1,96 @@
+services:
+  gnb:
+    container_name: srsran_gnb
+    image: srsran/gnb
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        OS_VERSION: "24.04"
+    privileged: true
+    cap_add:
+      - SYS_NICE
+      - CAP_SYS_PTRACE
+    volumes:
+      - /dev/bus/usb/:/dev/bus/usb/
+      - /usr/share/uhd/images:/usr/share/uhd/images
+      - /tmp/gnb.log:/tmp/gnb.log
+    networks:
+      macvlan-dhcp:
+        ipv4_address: 172.31.0.157
+    ports:
+      - "38412:38412/sctp"
+      - "50000-50020:50000-50020/udp"
+    configs:
+      - gnb_config.yml
+    command: gnb -c /gnb_config.yml
+
+  metrics-server:
+    container_name: metrics_server
+    image: srsran/metrics_server
+    build:
+      context: metrics_server
+    environment:
+      - PORT=${METRICS_SERVER_PORT}
+      - BUCKET=${DOCKER_INFLUXDB_INIT_BUCKET}
+      - TESTBED=default
+      - URL=http://${DOCKER_INFLUXDB_INIT_HOST}:${DOCKER_INFLUXDB_INIT_PORT}
+      - ORG=${DOCKER_INFLUXDB_INIT_ORG}
+      - TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
+    ports:
+      - 55555:${METRICS_SERVER_PORT}/udp
+    networks:
+      metrics:
+        ipv4_address: 172.19.1.4
+
+  influxdb:
+    container_name: influxdb
+    image: influxdb:${DOCKER_INFLUXDB_VERSION}
+    volumes:
+      - influxdb-storage:/var/lib/influxdb2:rw
+    env_file:
+      - .env
+    restart: on-failure:10
+    # Uncomment port section to access InfluxDB from outside the docker network
+    ports:
+      - 8086:${DOCKER_INFLUXDB_INIT_PORT}
+    networks:
+      metrics:
+        ipv4_address: 172.19.1.5
+
+  grafana:
+    container_name: grafana
+    image: srsran/grafana
+    build:
+      context: grafana
+    volumes:
+      - grafana-storage:/var/lib/grafana:rw
+    env_file:
+      - .env
+    depends_on:
+      - influxdb
+      - metrics-server
+    ports:
+      - 3300:${GRAFANA_PORT}
+    networks:
+      metrics:
+        ipv4_address: 172.19.1.6
+
+configs:
+  gnb_config.yml:
+    file: ${GNB_CONFIG_PATH:-../../utils_srsRAN/gnb_conf_256QAM_MIMO_30Mhz.yaml} #gnb_conf_64QAM_SISO_30Mhz.yaml} 
+    #file: ${GNB_CONFIG_PATH:-../../utils_srsRAN/gnb_conf_64QAM_SISO.yaml}  # Path to your desired config file
+
+volumes:
+  gnb-storage:
+  influxdb-storage:
+  grafana-storage:
+
+networks:
+  macvlan-dhcp:
+    external: true
+  metrics:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.19.1.0/24

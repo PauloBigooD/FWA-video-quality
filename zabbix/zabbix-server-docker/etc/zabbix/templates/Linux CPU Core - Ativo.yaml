@@ -1,0 +1,63 @@
+zabbix_export:
+  version: '7.4'
+  template_groups:
+    - uuid: b1a65eeba3cc4c9fb198e8f18f433839
+      name: 'Templates/Operating Systems'
+  templates:
+    - uuid: 4547779c62f945d78f28a3e4d23e8bdf
+      template: 'Linux CPU Core - Ativo'
+      name: 'Linux CPU Core - Ativo'
+      groups:
+        - name: 'Templates/Operating Systems'
+      items:
+        - uuid: 7475519423fc4beaae4a5656de0448a8
+          name: 'Active memory'
+          type: ZABBIX_ACTIVE
+          key: 'vm.memory.size[active]'
+          history: 1w
+          value_type: FLOAT
+          units: B
+          tags:
+            - tag: Application
+              value: Memory
+        - uuid: d1a484c014fe4254b729b6ed2efdb98a
+          name: 'Free memory'
+          type: ZABBIX_ACTIVE
+          key: 'vm.memory.size[free]'
+          history: 90d
+          units: B
+          description: 'memory that is readily available to any entity requesting memory'
+          tags:
+            - tag: Application
+              value: Memory
+        - uuid: 10a6ce171c9f41f59b9fde67b44bb769
+          name: 'Used memory'
+          type: ZABBIX_ACTIVE
+          key: 'vm.memory.size[used]'
+          history: 90d
+          units: B
+          tags:
+            - tag: Application
+              value: Memory
+      discovery_rules:
+        - uuid: 5763d1a4d6304519b28f36cfb782ea03
+          name: 'Descoberta de Núcleos de CPU'
+          type: ZABBIX_ACTIVE
+          key: system.cpu.discovery
+          filter:
+            conditions:
+              - macro: '{#CPU.NUMBER}'
+              - macro: '{#CPU.STATUS}'
+                value: online
+          lifetime: 30d
+          enabled_lifetime_type: DISABLE_NEVER
+          item_prototypes:
+            - uuid: 6820c9c79f9d4f588a831db0569cf5ee
+              name: 'CPU utilization core {#CPU.NUMBER}'
+              type: ZABBIX_ACTIVE
+              key: 'system.cpu.util[{#CPU.NUMBER}]'
+              value_type: FLOAT
+              units: '%'
+              tags:
+                - tag: Application
+                  value: core

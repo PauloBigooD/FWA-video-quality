@@ -1,0 +1,147 @@
+zabbix_export:
+  version: '7.0'
+  template_groups:
+    - uuid: 07c028322d7c4e2180510b9d762b970f
+      name: srsRAN
+  templates:
+    - uuid: c1e3f0f9006c49d6abc4086c06c61dba
+      template: 'O-RAN 5G monitoring - srsRAN'
+      name: 'O-RAN 5G monitoring - srsRAN'
+      groups:
+        - name: srsRAN
+      items:
+        - uuid: 1efb11f77be94aafbfae0cf7bef0f81d
+          name: 'CPU gNB'
+          key: 'proc.cpu.util[gnb]'
+          delay: 3s
+          value_type: FLOAT
+          trends: '0'
+          units: '%'
+          tags:
+            - tag: srsRAN
+              value: gNB
+        - uuid: 7350353ffd914095a955e36529bf7503
+          name: 'Memória gNB'
+          key: 'proc.mem[gnb]'
+          delay: 3s
+          trends: '0'
+          units: B
+          tags:
+            - tag: srsRAN
+              value: gNB
+      discovery_rules:
+        - uuid: eb9a7e9da0244939b40bd71929f9fbab
+          name: 'Discovery RRC gNB'
+          key: srs.gnb.kpi
+          delay: 10s
+          item_prototypes:
+            - uuid: c08ee3286b2c4b9ab4fb5a75c4d8bd74
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: CPU gNB'
+              type: DEPENDENT
+              key: 'cpu.gNB.srs[{#GNB_AMF_DU_ID}]'
+              delay: '0'
+              value_type: FLOAT
+              trends: '0'
+              units: '%'
+              master_item:
+                key: 'proc.cpu.util[gnb]'
+              tags:
+                - tag: srsRAN
+                  value: 'rrc - gNB'
+            - uuid: 65e287f8133f433eb089fb12f84ab55c
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: Memória gNB'
+              type: DEPENDENT
+              key: 'mem.gNB.srs[{#GNB_AMF_DU_ID}]'
+              delay: '0'
+              trends: '0'
+              units: B
+              master_item:
+                key: 'proc.mem[gnb]'
+              tags:
+                - tag: srsRAN
+                  value: 'rrc - gNB'
+            - uuid: 835391b1ab68456098b0b99f23276edb
+              name: '{#GNB_NAME}: PLMN'
+              type: CALCULATED
+              key: 'srs.amf.gnb[{#GNB_NAME}, {#GNB_PLMN}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#GNB_PLMN}'
+              tags:
+                - tag: srsRAN
+                  value: 'rrc - gNB'
+            - uuid: 1663dc04cfc540d0b9943c50cd8cb574
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: AMF_DU_ID'
+              type: CALCULATED
+              key: 'srs.gnb.kpi[{#GNB_NAME}, {#GNB_AMF_DU_ID}]'
+              trends: '0'
+              params: '{#GNB_AMF_DU_ID}'
+              tags:
+                - tag: srsRAN
+                  value: 'rrc - gNB'
+            - uuid: cb6f562c562543b5a94aab74beec6ccc
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: Band'
+              type: CALCULATED
+              key: 'srs.gnb.kpi[{#GNB_NAME}, {#GNB_BAND}]'
+              trends: '0'
+              params: '{#GNB_BAND}'
+              tags:
+                - tag: srsRAN
+                  value: 'rrc - gNB'
+            - uuid: 07bb7158b0de4cdd8b6321ef7ecdd9e7
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: nr_Cell_ID'
+              type: CALCULATED
+              key: 'srs.gnb.kpi[{#GNB_NAME}, {#GNB_NRCELLID}]'
+              trends: '0'
+              params: '{#GNB_NRCELLID}'
+              tags:
+                - tag: araRAN
+                  value: 'rrc - gNB'
+            - uuid: faf4c873e0b344e3904a30aba7b5f5c7
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID} PCI'
+              type: CALCULATED
+              key: 'srs.gnb.kpi[{#GNB_NAME}, {#GNB_PCI}]'
+              trends: '0'
+              params: '{#GNB_PCI}'
+              tags:
+                - tag: srsRAN
+                  value: 'rrc - gNB'
+            - uuid: 4809e251781d48469046bded3771d322
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: PRB'
+              type: CALCULATED
+              key: 'srs.gnb.kpi[{#GNB_NAME}, {#GNB_PRB},{#GNB_PLMN}]'
+              trends: '0'
+              units: 'PRB''s'
+              params: '{#GNB_PRB}'
+              tags:
+                - tag: srsRAN
+                  value: 'rrc - gNB'
+            - uuid: b968b3bab51d40d7b91125526b0f25b9
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: SCS'
+              type: CALCULATED
+              key: 'srs.gnb.kpi[{#GNB_NAME}, {#GNB_SCS}]'
+              trends: '0'
+              units: kHz
+              params: '{#GNB_SCS}'
+              tags:
+                - tag: srsRAN
+                  value: 'rrc - gNB'
+            - uuid: ddd67a58634d440baa38bdb7809328bb
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: SSB_ARFCN'
+              type: CALCULATED
+              key: 'srs.gnb.kpi[{#GNB_NAME}, {#GNB_SSB_ARFCN}]'
+              trends: '0'
+              params: '{#GNB_SSB_ARFCN}'
+              tags:
+                - tag: srsRAN
+                  value: 'rrc - gNB'
+            - uuid: fd5d31ca154740b7b3c88c2ff6681042
+              name: '{#GNB_NAME}:{#GNB_AMF_DU_ID}: Name'
+              type: CALCULATED
+              key: 'srs.gnb.kpi[{#GNB_NAME}]'
+              value_type: TEXT
+              trends: '0'
+              params: '{#GNB_NAME}'
+              tags:
+                - tag: srsRAN
+                  value: 'rrc - gNB'

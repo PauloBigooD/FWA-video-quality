@@ -1,0 +1,15 @@
+# Pin version for reproducibility
+FROM zabbix/zabbix-server-pgsql:ubuntu-latest 
+
+USER root
+
+# Install only required tools for research scripts
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 python3-pip \
+    snmp \
+    net-tools \
+    vim \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set timezone
+ENV TZ=America/Recife
