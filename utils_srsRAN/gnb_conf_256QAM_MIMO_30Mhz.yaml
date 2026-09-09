@@ -30,6 +30,10 @@ ru_sdr:
   rx_gain: 40
 
 cell_cfg:
+  pdsch:
+    mcs_table: qam256
+  ssb:
+    ssb_period: 20
   dl_arfcn: 650000 #648666
   band: 78
   channel_bandwidth_MHz: 30

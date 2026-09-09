@@ -2,7 +2,7 @@
 # transmitting in band 78, with 20 MHz bandwidth and 30 kHz sub-carrier-spacing. A USRP B200 is configured
 # as the RF frontend using split 8. Note in this example an external clock source is not used, so the sync
 # is not defined and the default is used.
-ran_node_name: gNB-srsRAN-256QAM_MIMO_30Mhz
+ran_node_name: gNB-srsRAN-256QAM_SISO_30Mhz
 cu_cp:
   amf:
     addr: 172.31.0.48  # AMF ngap IP

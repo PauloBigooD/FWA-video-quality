@@ -1,6 +1,7 @@
 # Ignore generated files
 openairinterface5g
 srsRAN/build
+srsRAN_Project
 libzmq/
 mbedtls/
 uhd/

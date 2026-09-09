@@ -1245,7 +1245,7 @@ function logs_Open5GS_k8s() {
 
 function install_RAN_srsRAN(){
     echo "Instalando dependências"
-    install_package "cmake" "make" "g++" "g++-13" "libgtest-dev" "pkg-config" "libfftw3-dev" "libboost-program-options-dev" "libconfig++-dev" "libmbedtls-dev" "libsctp-dev" "libyaml-cpp-dev" "libdw-dev" "libbfd-dev" "libdwarf-dev" "binutils-dev"
+    install_package "cmake" "make" "g++" "libgtest-dev" "pkg-config" "libfftw3-dev" "libboost-program-options-dev" "libconfig++-dev" "libmbedtls-dev" "libsctp-dev" "libyaml-cpp-dev" "libdw-dev" "libbfd-dev" "libdwarf-dev" "binutils-dev"
     #sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100
     #sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100
     sudo rm -rf mbedtls

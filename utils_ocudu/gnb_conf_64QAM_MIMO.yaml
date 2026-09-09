@@ -2,7 +2,7 @@
 # transmitting in band 78, with 20 MHz bandwidth and 30 kHz sub-carrier-spacing. A USRP B200 is configured
 # as the RF frontend using split 8. Note in this example an external clock source is not used, so the sync
 # is not defined and the default is used.
-ran_node_name: gNB-srsRAN-64QAM_SISO
+ran_node_name: gNB-srsRAN-64QAM_MIMO
 cu_cp:
   amf:
     addr: 10.53.1.2  # AMF ngap IP
@@ -38,30 +38,14 @@ cell_cfg:
   plmn: "00101"
   tac: 1
   pci: 1
-#  nof_antennas_dl: 2                    # Optional UINT (1). Sets the number of antennas for downlink transmission. Supported: [1, 2, 4].
-#  nof_antennas_ul: 2
-
-    #e2:
-    #  e2sm_kpm_enabled: true            # Enable KPM service module
-    #  e2sm_rc_enabled: true             # Enable RC service module
-    #  enable_du_e2: true                # Enable DU E2 agent (one for each DU instance)
-    #  e2sm_kpm_enabled: true            # Enable KPM service module
-    #  e2sm_rc_enabled: true             # Enable RC service module
-    #  bind_addr: 0.0.0.0                #10.0.2.1
-    #  addr: 10.0.2.10                   # RIC IP address
-    #  port: 36421                       # RIC port
-
+  nof_antennas_dl: 2                    # Optional UINT (1). Sets the number of antennas for downlink transmission. Supported: [1, 2, 4].
+  nof_antennas_ul: 2
 
 log:
   filename: /tmp/gnb.log
-  all_level: warning
-  #rrc_level: info
-  #ngap_level: info
-  #gtpu_level: info
-  #radio_level: info  
+  all_level: info 
 
 pcap:
-  # e2ap_enable: true
   mac_enable: false
   mac_filename: /tmp/gnb_mac.pcap
   ngap_enable: false

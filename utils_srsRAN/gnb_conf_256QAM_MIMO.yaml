@@ -2,7 +2,7 @@
 # transmitting in band 78, with 20 MHz bandwidth and 30 kHz sub-carrier-spacing. A USRP B200 is configured
 # as the RF frontend using split 8. Note in this example an external clock source is not used, so the sync
 # is not defined and the default is used.
-ran_node_name: gNB-srsRAN-64QAM_SISO
+ran_node_name: gNB-srsRAN-256QAM_MIMO
 cu_cp:
   amf:
     addr: 172.31.0.54  # AMF ngap IP
@@ -38,14 +38,14 @@ cell_cfg:
   channel_bandwidth_MHz: 20
   common_scs: 30
   plmn: "00101"
-  tac: 1
+  tac: 
   pci: 1
   nof_antennas_dl: 2                    # Optional UINT (1). Sets the number of antennas for downlink transmission. Supported: [1, 2, 4].
   nof_antennas_ul: 2
 
 log:
   filename: /tmp/gnb.log
-  all_level: warning
+  all_level: info
   #rrc_level: info
   #ngap_level: info
   #gtpu_level: info
