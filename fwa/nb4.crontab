@@ -1,0 +1,31 @@
+i# ================================================================
+# crontab nb4 — participa apenas da fase 5_clientes
+# (o mesmo arquivo serve para o nb5, trocando CLIENT_ID)
+# Aplicar com:  crontab ~/fwa/crontabs/nb4.crontab
+# ================================================================
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+DISPLAY=:1
+XAUTHORITY=/home/lance/.Xauthority       # ← ajustar para este notebook
+HEADLESS=true
+CLIENT_ID=nb4                            # ← nb5 no outro notebook
+DASH_URL=https://172.31.0.220
+
+# Rodada 1
+08 23 * * * PHASE=5_clientes bash ~/fwa/run-phase.sh >> /tmp/fwa_nb4.log 2>&1
+
+# Rodada 2
+20 23 * * * PHASE=5_clientes bash ~/fwa/run-phase.sh >> /tmp/fwa_nb4.log 2>&1
+
+# Rodada 3
+32 23 * * * PHASE=5_clientes bash ~/fwa/run-phase.sh >> /tmp/fwa_nb4.log 2>&1
+
+# Rodada 4
+44 23 * * * PHASE=5_clientes bash ~/fwa/run-phase.sh >> /tmp/fwa_nb4.log 2>&1
+
+# Rodada 5
+56 23 * * * PHASE=5_clientes bash ~/fwa/run-phase.sh >> /tmp/fwa_nb4.log 2>&1
+
+# Teste isolado 1_cliente (opcional — descomente quando quiser):
+#23 23 * * * PHASE=1_cliente bash ~/fwa/run-phase.sh >> /tmp/fwa_nb4.log 2>&1
+

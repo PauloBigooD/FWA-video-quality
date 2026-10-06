@@ -1,14 +1,11 @@
 {
-  "name": "puppeteer-har-export",
-  "version": "1.0.1",
-  "description": "Exportação automática de HAR com Puppeteer",
-  "main": "index.js",
+  "dependencies": {
+    "mkdirp": "^3.0.1",
+    "puppeteer": "^24.38.0",
+    "puppeteer-har": "^1.1.2"
+  },
   "scripts": {
     "start": "node index.js"
-  },
-  "dependencies": {
-    "mkdirp": "^1.0.4",
-    "puppeteer": "^24.10.0",
-    "puppeteer-har": "^1.1.2"
   }
 }
+
