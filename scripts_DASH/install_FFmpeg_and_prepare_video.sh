@@ -3,6 +3,9 @@
 # Create directories for video processing
 mkdir video video-dash
 
+pip3 install pandas
+pip3 install wget
+
 # Download the test video
 cd video
 pip3 install gdown
