@@ -142,3 +142,4 @@ if __name__ == "__main__":
         input_file = "maxwell_2026-10-07T16-27-22-747Z.har"
 
     check_segments(input_file)
+

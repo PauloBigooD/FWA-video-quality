@@ -211,3 +211,4 @@ if output_videos:
     print("\n✅ Concatenação e upscale para 4K concluídos com sucesso! Arquivo gerado: saida.mp4")
 else:
     print("\n⚠️ Nenhum segmento foi processado.")
+
