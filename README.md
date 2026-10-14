@@ -66,7 +66,24 @@ Codifica o vídeo de referência em múltiplas representações de taxa de bits 
   ```
 ---
 
-### 3. `get_segments.py`
+### 3. Iniciar captura do vídeo DASH
+Automação para execução e captura de métricas do vídeo DASH gerando um arquivo `.har` e outro `.csv` contendo as métricas de interesse.
+
+* **Ações:**
+  * Inicializa o navegador Google Chrome em modo oculto.
+  * Inicia o player do vídeo.
+  * Realiza a coleta e construção dos arquivos `.har` e `.csv`.
+  * As ações são realizadas em segundo plano com logs em tela.
+
+* **Iniciar npm:**
+  ```bash
+  cd ../npm_fwa
+  npm install
+  xvfb-run npm start
+  ```
+---
+
+### 4. `get_segments.py`
 Script orquestrador das capturas de rede. Lê arquivos `.har` gerados durante as sessões de streaming no navegador, extrai as requisições dos segmentos e invoca a reconstrução.
 
 * **Ações:**
@@ -87,7 +104,7 @@ Script orquestrador das capturas de rede. Lê arquivos `.har` gerados durante as
 
 ---
 
-### 4. `concat_filter_2.py`
+### 5. `concat_filter_2.py`
 Processa as URIs do experimento, baixa os segmentos e realiza a montagem do vídeo degradado final.
 
 * **Ações:**
@@ -103,7 +120,7 @@ Processa as URIs do experimento, baixa os segmentos e realiza a montagem do víd
 
 ---
 
-### 5. `get_metrics.py`
+### 6. `get_metrics.py`
 Calcula as métricas de qualidade de vídeo comparando o vídeo reconstruído de cada experimento com o vídeo original de referência.
 
 * **Ações:**
@@ -120,7 +137,7 @@ Calcula as métricas de qualidade de vídeo comparando o vídeo reconstruído de
 
 ---
 
-### 6. `verify_segments.py` (Utilitário)
+### 7. `verify_segments.py` (Utilitário)
 Verifica se existem falhas ou lacunas de segmentos na sequência do `.csv` capturado e realiza o preenchimento automático copiando a qualidade vizinha para manter a continuidade temporal do vídeo.
 
 * **Uso:**
