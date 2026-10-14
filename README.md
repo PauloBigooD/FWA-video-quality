@@ -1,173 +1,177 @@
-# Video Conversion to DASH and Dependency Installation
+# Processamento, Reconstrução e Avaliação de Vídeo MPEG-DASH
 
-This repository contains Bash and Python scripts for preparing an environment, converting a video to the MPEG-DASH format, downloading received DASH segments, reconstructing the video according to the received quality, and obtaining video quality metrics.
+Este repositório contém o conjunto de ferramentas e scripts em Bash e Python para automatizar o pipeline de testes com vídeo MPEG-DASH. O fluxo contempla desde a preparação do ambiente e codificação DASH até a reconstrução de vídeos a partir de capturas HAR e o cálculo de métricas de qualidade quadro a quadro (**PSNR** e **SSIM**).
 
-The first Bash script installs Docker and the required dependencies, while the second performs video encoding and generates the DASH manifest.
+---
 
-## Scripts
+## 🏗️ Visão Geral do Fluxo
 
-### 1. `install_docker_and_prepare_video.sh`
-
-This script performs the following actions:
-
-* Installs Docker on the system (Ubuntu), configuring the official GPG key and Docker repository.
-* Creates the `video` and `video-dash` directories.
-* Downloads a sample video (`bbb_sunflower_2160p_60fps_normal.mp4`) from the Big Buck Bunny project.
-* Installs the required dependencies: `ffmpeg` (for audio/video encoding) and `gpac` (for generating the DASH manifest).
-
-#### Prerequisites
-
-* Ubuntu-based operating system.
-* Superuser (`sudo`) privileges.
-
-#### Usage
-
-```bash
-chmod +x install_docker_and_prepare_video.sh
-sudo ./install_docker_and_prepare_video.sh
+```
+[ Vídeo Bruto (4K) ]
+         │
+         ▼ (1. generate_dash_manifest.sh)
+[ Servidor MPEG-DASH ] ───(Transmissão/Navegador)───► [ Arquivo .har ]
+                                                             │
+                                                             ▼ (2. get_segments.py)
+                                                     [ Extração CSV URIs ]
+                                                             │
+                                                             ▼ (3. concat_filter_2.py)
+                                                     [ Download + Upscaling 4K ]
+                                                             │
+                                                             ▼
+                                                    [ Vídeo Reconstruído ]
+                                                             │
+                                                             ▼ (4. get_metrics_origin.py)
+                                                     [ Relatórios PSNR e SSIM ]
 ```
 
-#### Output
+---
 
-* Directories created: `video/` and `video-dash/`.
-* Downloaded video: `video/bbb_sunflower_2160p_60fps_normal.mp4`.
-* Installed dependencies: Docker, `ffmpeg`, and `gpac`.
+## 🛠️ Scripts do Repositório
+
+### 1. `install_docker_and_prepare_video.sh`
+Prepara o ambiente do sistema operacional (Ubuntu/Debian) instalando pacotes fundamentais.
+
+* **Ações:**
+  * Configura o repositório oficial e instala o **Docker**.
+  * Cria as pastas padrão `video/` e `video-dash/`.
+  * Baixa o vídeo de referência em 4K (**Big Buck Bunny** - 2160p 60fps).
+  * Instala `ffmpeg` (processamento de vídeo), `gpac`/`MP4Box` (manipulação DASH) e `jq` (leitura de JSON/HAR).
+* **Uso:**
+  ```bash
+  cd scripts_DASH
+  sudo ./install_docker_and_prepare_video.sh
+  ```
 
 ---
 
 ### 2. `generate_dash_manifest.sh`
+Codifica o vídeo de referência em múltiplas representações de taxa de bits (bitrates) e gera o manifesto DASH (`manifest.mpd`).
 
-This script converts a video to the MPEG-DASH format by generating multiple video representations at different bitrates and creating a `.mpd` manifest.
+* **Ações:**
+  * Converte a faixa de áudio em AAC (128 kbps).
+  * Gera representações de vídeo em taxas de bits configuráveis (ex: 18M até 1.8M).
+  * Fragmenta o vídeo em segmentos `.m4s` e gera o manifesto com o `MP4Box`.
+* **Uso:**
+  ```bash
+  ./generate_dash_manifest.sh
+  ```
+* ⚠️ **Campos para Ajustar no Script:**
+  * `input_file`: Caminho do vídeo original de entrada (padrão: `video/bbb_sunflower_2160p_60fps_normal.mp4`).
+  * `output_dir`: Pasta de destino dos segmentos DASH (padrão: `video-dash`).
+  * `bitrates`: Lista de bitrates para codificação (ex: `("18M" "16M" "14M" ...)`).
+* **Iniciar Servidor Dash:**
+  ```bash
+  docker compose up -d
+  ```
+---
 
-#### Features
+### 3. `get_segments.py`
+Script orquestrador das capturas de rede. Lê arquivos `.har` gerados durante as sessões de streaming no navegador, extrai as requisições dos segmentos e invoca a reconstrução.
 
-* Checks whether the input file exists at `./video/bbb_sunflower_2160p_60fps_normal.mp4`.
-* Creates the output directory (`./video-dash`) if it does not exist.
-* Encodes the audio in AAC (128 kbps) as a separate file.
-* Encodes the video at multiple bitrates (18, 16, 14, 12, 10, 8, 6, 5, 4, 3, 2.5, 2, and 1.8 Mbps) using `ffmpeg`.
-* Generates the DASH manifest (`manifest.mpd`) with automatic segmentation using MP4Box, which is part of the GPAC package.
-
-#### Prerequisites
-
-* `ffmpeg` and `gpac` installed (these can be installed using `install_docker_and_prepare_video.sh`).
-* Input video file available at `./video/bbb_sunflower_2160p_60fps_normal.mp4`.
-
-#### Usage
-
-```bash
-chmod +x generate_dash_manifest.sh
-sudo ./generate_dash_manifest.sh
-```
-
-#### Configuration
-
-* **Input file:** `./video/bbb_sunflower_2160p_60fps_normal.mp4`
-  This can be changed by editing the `input_file` variable.
-* **Output directory:** `./video-dash`
-  This can be changed by editing the `output_dir` variable.
-* **Bitrates:** Customizable list defined in the `bitrates` variable (in Mbps).
-* **Resolution:** Fixed at 3840x2160 (4K), adjustable through the `-vf "scale=3840:2160"` parameter.
-
-#### Output
-
-* Audio file: `video-dash/audio_128k.m4a`.
-* Segmented video files: `video-dash/bbb_sunflower_normal_<bitrate>M.mp4`.
-* DASH manifest: `video-dash/manifest.mpd`.
-* Additional segments generated by MP4Box.
+* **Ações:**
+  * Converte cada `.har` da pasta de logs em um arquivo `.csv` na pasta `segments_csv/`.
+  * Chama o `concat_filter_2.py` para processar cada experimento.
+  * Renomeia o vídeo final gerado para `saida_<nome_do_experimento>.mp4`.
+* **Uso:**
+  ```bash
+  ./get_segments.py
+  ```
+* ⚠️ **Campos para Ajustar no Script:**
+  * `diretorio`: Caminho onde estão salvos os logs `.har` do navegador (ex: `"/home/usuario/har_logs"`).
+  * `comando_jq`: Filtro de IP/URL do servidor MPEG-DASH nas requisições.
+    ```python
+    # Altere o IP e a porta para o endereço do seu servidor
+    "http://172.31.0.54:8080/video-dash/segment_bbb_sunflower"
+    ```
 
 ---
 
-### Example Execution
+### 4. `concat_filter_2.py`
+Processa as URIs do experimento, baixa os segmentos e realiza a montagem do vídeo degradado final.
 
-```bash
-$ ./generate_dash_manifest.sh
-Encoding audio...
-Audio encoded: ./video-dash/audio_128k.m4a
-Encoding and segmenting video at 18Mbps...
-[...]
-Generating DASH manifest...
-Done! DASH manifest generated at:
-./video-dash/manifest.mpd
-```
-
-#### Dependencies
-
-* **Docker:** Used for containerized environments (optional and installed by the first script).
-* **ffmpeg:** Audio and video encoding tool.
-* **gpac:** Package that includes MP4Box for generating the DASH manifest.
+* **Ações:**
+  * Baixa os arquivos de inicialização (`init`) e os segmentos `.m4s` recebidos.
+  * Agrupa segmentos sequenciais de mesma resolução/qualidade.
+  * Aplica filtro de **upscaling** via FFmpeg para equalizar todos os blocos na resolução de referência ($3840 \times 2160$).
+  * Concatena todos os blocos convertidos em um único arquivo de saída `saida.mp4`.
+* **Uso:**
+  Invocado automaticamente pelo `get_segments.py` ou manualmente via:
+  ```bash
+  ./concat_filter_2.py segments_csv/<experimento>.csv
+  ```
 
 ---
 
-### Notes
+### 5. `get_metrics.py`
+Calcula as métricas de qualidade de vídeo comparando o vídeo reconstruído de cada experimento com o vídeo original de referência.
 
-* Make sure that sufficient disk space is available, as multiple video representations will be generated.
-* The input video must be in a format supported by `ffmpeg` (e.g., `.mp4`).
-* To customize parameters such as resolution and bitrates, edit the variables in `generate_dash_manifest.sh`.
-
----
-
-### License
-
-This project is provided as an example and does not have a specific license. Use it at your own risk.
-
----
-
-### 3. `concat_filter_2.py`
-
-This script downloads MPEG-DASH video segments and reconstructs the video according to the quality received.
-
-#### Features
-
-* Downloads video segments according to the packets received and captured using `tcpdump` or Wireshark.
-* Concatenates segments into groups according to the received quality and the bitrate of the video representation.
-* Performs **upscaling** of the segments, converting them to the reference video quality (3840x2160, or 4K).
-* Concatenates the converted 4K segment groups to generate the final video.
-
-#### Prerequisites
-
-* `ffmpeg`, `python3-pip`, and `wget` installed (these can be installed using `install_docker_and_prepare_video.sh`).
-* A `.csv` file containing the captured packets, which is used to download the corresponding segments from the MPEG-DASH video server.
-* The `init` files corresponding to each bitrate and resolution provided by the MPEG-DASH server.
-
-> **WARNING:** If any segment is missing, it must be added manually. Network traffic was also monitored using the Firefox browser to ensure that the expected packets were received.
-
-### Example Execution
-
-```bash
-$ python concat_filter_2.py
-```
-
-#### Dependencies
-
-* **ffmpeg:** Audio and video encoding tool, as described in `generate_dash_manifest.sh`.
-* **tcpdump / Wireshark:** Network traffic monitoring and packet capture tools.
-* **python3-pip:** Standard package management system used to install and manage Python software packages.
-* **wget:** Command-line tool for downloading files.
+* **Ações:**
+  * Executa os filtros de avaliação `psnr` e `ssim` do FFmpeg em paralelo quadro a quadro.
+  * Gera os arquivos `psnr_<experimento>.csv` e `ssim_<experimento>.csv` na pasta `segments_csv/`.
+  * Cada relatório contém $N$ linhas correspondentes ao total de quadros do vídeo ($\text{Duração} \times \text{FPS}$, ex: $180\text{s} \times 60\text{fps} = 10.800\text{ linhas}$).
+* **Uso:**
+  ```bash
+  ./get_metrics.py
+  ```
+* ⚠️ **Campos para Ajustar no Script:**
+  * `video_referencia`: Caminho para o vídeo de referência em alta qualidade (padrão: `video/bbb_sunflower_2160p_60fps_normal.mp4`).
+  * `diretorio_csvs`: Diretório onde estão os relatórios e saídas (padrão: `segments_csv`).
 
 ---
 
-## Tutorial
+### 6. `verify_segments.py` (Utilitário)
+Verifica se existem falhas ou lacunas de segmentos na sequência do `.csv` capturado e realiza o preenchimento automático copiando a qualidade vizinha para manter a continuidade temporal do vídeo.
 
-### 1. Segment Capture
+* **Uso:**
+  ```bash
+  ./verify_segments.py
+  ```
 
-We capture the record of the MPEG-DASH video segments received by the browser. Firefox was used in our experiment.
+---
 
-The records of the MPEG-DASH segments received by the browser (in `.m4a` format) are stored in `.har` files.
+## 📋 Passo a Passo de Execução (Workflow Completo)
 
-### 2. Segment Verification
+1. **Preparar o Ambiente e Obter o Vídeo Bruto:**
+   ```bash
+   sudo ./install_docker_and_prepare_video.sh
+   ```
 
-The `verify_segments.py` script checks the received segments, verifying whether all expected segments are present or if any are missing.
+2. **Gerar os Segmentos e Manifesto DASH:**
+   ```bash
+   ./generate_dash_manifest.sh
+   ```
+   `⚠️ O procedimento de gerar os segmentos DASH pode ser um pouco demorado ~ 30 min`
 
-If a segment is missing, the script downloads a replacement segment according to the quality of the preceding and following segments.
+3. **Iniciar o servidor DASH**
+   ```bash
+   docker compose up -d
+   ```
 
-### 3. Segment Download and Video Concatenation
+4. **Realizar o Experimento de Streaming:**
+   ```bash
+   cd ../npm_fwa
+   npm install
+   xvfb-run npm start
+   ```
+   `⚠️ Confira os arquivos de log gerados em /home/username/har_logs .csv e .har`
 
-The `get_segments.py` script converts the `.har` files into `.csv` files and calls the `concat_filter_2.py` script.
+5. **Reconstruir os Vídeos dos Experimentos:**
+   ```bash
+   ./get_segments.py
+   ```
+   *Isto gerará os vídeos `saida_<nome_do_experimento>.mp4`.*
 
-The `concat_filter_2.py` script downloads the video segments and concatenates segments with similar quality into sequential groups. Afterward, these segment groups are upscaled to 4K quality (2160p) and finally concatenated again to generate the final degraded video.
+6. **Calcular Métricas de Qualidade (PSNR, SSIM, VMAF e Quality):**
+   ```bash
+   ./get_metrics.py
+   ./get_quality_log.py
+   ```
+   *Isto gerará os arquivos de métricas `psnr_<experimento>.csv`, `ssim_<experimento>.csv`, `vmaf_<experimento>.csv` e  `quality_<experimento>.csv`  em `segments_csv/`.*
 
-The operations performed by these scripts use `ffmpeg`, `python3-pip`, and `wget`.
+---
 
-### 4. Quality Metrics (SSIM and PSNR)
+## 💡 Observações Importantes
 
-The `get_metrics.py` script calculates the **SSIM (Structural Similarity Index Measure)** and **PSNR (Peak Signal-to-Noise Ratio)** video quality metrics using `ffmpeg`.
+* **Espaço em Disco:** Certifique-se de possuir pelo menos 15-20 GB livres para armazenar os segmentos baixados, vídeos intermediários e os arquivos de saída em 4K.
+* **Compatibilidade de FPS/Resolução:** Certifique-se de que o vídeo reconstruído e o vídeo de referência possuem exatamente o mesmo número de quadros e taxa de FPS para evitar divergências nos cálculos de PSNR/SSIM.

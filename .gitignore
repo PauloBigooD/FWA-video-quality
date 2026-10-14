@@ -9,3 +9,12 @@ flexric/
 oran-sc-ric/
 swig/
 zabbix/zabbix-server-docker/var/
+npm_fwa/scripts_DASH/
+scripts_DASH/downloaded_segments
+scripts_DASH/video-dash
+scripts_DASH/measurement_results
+scripts_DASH/plot_results
+scripts_DASH/video
+scripts_DASH/4k.mp4
+scripts_DASH/saida_*
+scripts_DASH/segments_csv

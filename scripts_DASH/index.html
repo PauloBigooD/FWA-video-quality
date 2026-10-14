@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DASH Player com troca de algoritmo</title>
+    <script src="https://cdn.jsdelivr.net/npm/dashjs@4.7.1/dist/dash.all.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background: #0d1117; color: #c9d1d9; }
+        video { width: 80%; margin: 20px auto; display: block; border-radius: 8px; background: #000; }
+        button { margin: 10px; padding: 10px 20px; font-size: 16px; cursor: pointer; background: #21262d; color: #c9d1d9; border: 1px solid #30363d; border-radius: 6px; }
+        button:hover { background: #30363d; }
+        button.active { background: #1f6feb; border-color: #58a6ff; }
+        #metrics-panel { max-width: 600px; margin: 20px auto; background: #161b22; border-radius: 8px; padding: 15px; border: 1px solid #30363d; text-align: left; font-size: 14px; }
+        #metrics-panel h2 { font-size: 16px; margin: 0 0 10px 0; color: #58a6ff; }
+        .metric-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #21262d; }
+        .metric-val { font-weight: bold; color: #7ee787; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>DASH Streaming Player com troca de algoritmo</h1>
+    <video id="videoPlayer" controls></video>
+
+    <div>
+        <button id="btn-bola" class="active" onclick="setABR('abrBola')">🎯 BOLA</button>
+        <button id="btn-throughput" onclick="setABR('abrThroughput')">📊 Throughput</button>
+    </div>
+
+    <!-- ====== PAINEL DE MÉTRICAS ====== -->
+    <div id="metrics-panel">
+        <h2>📈 Métricas em Tempo Real</h2>
+        <div class="metric-row"><span>⏱️ Tempo:</span><span class="metric-val" id="m-time">0s</span></div>
+        <div class="metric-row"><span>📺 Resolução:</span><span class="metric-val" id="m-resolution">-</span></div>
+        <div class="metric-row"><span>🔢 Bitrate:</span><span class="metric-val" id="m-bitrate">-</span></div>
+        <div class="metric-row"><span>📡 Throughput:</span><span class="metric-val" id="m-throughput">-</span></div>
+        <div class="metric-row"><span>🔄 Trocas qualidade:</span><span class="metric-val" id="m-switches">0</span></div>
+        <div class="metric-row"><span>⛔ Stalls:</span><span class="metric-val" id="m-stalls">0</span></div>
+        <div class="metric-row"><span>⏸️ Duração stalls:</span><span class="metric-val" id="m-stall-duration">0s</span></div>
+        <div class="metric-row"><span>📦 Buffer:</span><span class="metric-val" id="m-buffer">-</span></div>
+        <div class="metric-row"><span>🎯 Algoritmo:</span><span class="metric-val" id="m-abr">BOLA</span></div>
+    </div>
+    <!-- ====== FIM PAINEL ====== -->
+
+    <script>
+        let player;
+        let qualitySwitches = 0;
+        let stallCount = 0;
+        let stallStart = null;
+        let totalStallDuration = 0;
+        let playbackStarted = false;
+        const url = "video-dash/manifest.mpd";
+
+        (function initPlayer() {
+            player = dashjs.MediaPlayer().create();
+            player.updateSettings({
+                streaming: { abr: { ABRStrategy: "abrBola" } }
+            });
+            player.initialize(document.querySelector("#videoPlayer"), url, true);
+
+            console.log("ABR Strategy ativa:", player.getSettings().streaming.abr.ABRStrategy);
+
+            player.on(dashjs.MediaPlayer.events.QUALITY_CHANGE_RENDERED, function(e) {
+                if (e.mediaType === 'video') {
+                    const oldRate = e.oldQuality;
+                    const newRate = e.newQuality;
+                    if (oldRate !== newRate && oldRate !== null) {
+                        qualitySwitches++;
+                        document.getElementById('m-switches').textContent = qualitySwitches;
+                    }
+                    const info = player.getBitrateInfoListFor("video")[newRate];
+                    document.getElementById('m-bitrate').textContent = (info.bitrate / 1000000).toFixed(1) + ' Mbps';
+                    document.getElementById('m-resolution').textContent = info.width + 'x' + info.height;
+                    console.log(`Qualidade alterada: índice ${newRate}, bitrate = ${info.bitrate / 1000} kbps`);
+                }
+            });
+
+            player.on(dashjs.MediaPlayer.events.PLAYBACK_STALLED, () => {
+                if (!playbackStarted) return;      // buffering inicial ≠ stall
+                if (stallStart !== null) return;   // stall já em andamento
+                stallStart = performance.now();
+                stallCount++;
+                document.getElementById('m-stalls').textContent = stallCount;
+                console.log('⛔ STALL');
+            });
+
+            player.on(dashjs.MediaPlayer.events.PLAYBACK_PLAYING, () => {
+                if (stallStart) {
+                    const dur = (performance.now() - stallStart) / 1000;
+                    totalStallDuration += dur;
+                    document.getElementById('m-stall-duration').textContent = totalStallDuration.toFixed(1) + 's';
+                    stallStart = null;
+                }
+            });
+
+            player.on(dashjs.MediaPlayer.events.PLAYBACK_STARTED, () => {
+                playbackStarted = true;            // só daqui em diante stall é stall
+                console.log("Playback iniciado");
+            });
+
+            player.on(dashjs.MediaPlayer.events.PLAYBACK_ENDED, () => {
+                console.log("Playback finalizado");
+                let tries = 5;
+                let interval = setInterval(() => {
+                    console.log("Disparando trigger HAR...");
+                    window.postMessage({ type: "har-export-trigger" }, "*");
+                    tries--;
+                    if (tries <= 0) clearInterval(interval);
+                }, 1500);
+                player.reset();
+            });
+
+            player.on(dashjs.MediaPlayer.events.ERROR, e => console.error("Erro no player:", e));
+        })();
+
+        setInterval(() => {
+            if (!player) return;
+            const t = player.time();
+            document.getElementById('m-time').textContent = Math.floor(t / 60) + 'm ' + Math.floor(t % 60) + 's';
+            document.getElementById('m-buffer').textContent = player.getBufferLength().toFixed(1) + 's';
+            const thr = player.getAverageThroughput('video');   // kbps
+            if (thr > 0) document.getElementById('m-throughput').textContent = (thr / 1000).toFixed(1) + ' Mbps';
+        }, 1000);
+
+        function setABR(strategy) {
+            if (player) {
+                player.updateSettings({ streaming: { abr: { ABRStrategy: strategy } } });
+                const name = strategy.replace('abr', '').replace('Dynamic', 'Throughput');
+                document.getElementById('m-abr').textContent = name;
+                document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+                const btnId = 'btn-' + strategy.replace('abr', '').toLowerCase().replace('dynamic', 'throughput');
+                const btn = document.getElementById(btnId);
+                if (btn) btn.classList.add('active');
+                console.log("Nova estratégia ABR:", player.getSettings().streaming.abr.ABRStrategy);
+            }
+        }
+    </script>
+</body>
+</html>

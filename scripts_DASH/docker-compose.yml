@@ -1,0 +1,15 @@
+services:
+  dash-server:
+    image: nginx:latest            # era nginx:alpine (mainline tem HTTP/3)
+    container_name: dash-server
+    ports:
+      - "8080:80"
+      - "443:443"                    # TCP (fallback HTTP/2)
+      - "443:443/udp"                # UDP (QUIC)
+    volumes:
+      - ./video-dash:/usr/share/nginx/html/video-dash
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./index.html:/usr/share/nginx/html/index.html
+      - ./mime.types:/etc/nginx/mime.types  # Adiciona o mime.types personalizado
+      - ./ssl:/etc/nginx/ssl:ro      # certificado para HTTP/3 (gerar com openssl)
+    restart: unless-stopped

@@ -8,7 +8,7 @@ import wget
 from collections import defaultdict
 
 # Arquivo de entrada (ponte para o arquivo .har ou .csv com as requisições de rede)
-input_file = 'maxwell_2026-10-07T16-27-22-747Z.har'
+input_file = '/home/paulobigood/har_logs/paulobigood_2026-10-13T13-04-32-278Z.har'
 
 all_init_files = {
     ('640x360', '1.8M'): ['downloaded_segments/segment_bbb_sunflower_640x360_1.8Minit.mp4'],
@@ -20,7 +20,7 @@ all_init_files = {
     ('1280x720', '6M'): ['downloaded_segments/segment_bbb_sunflower_1280x720_6Minit.mp4'],
     ('1280x720', '8M'): ['downloaded_segments/segment_bbb_sunflower_1280x720_8Minit.mp4'],
     ('1920x1080', '10M'): ['downloaded_segments/segment_bbb_sunflower_1920x1080_10Minit.mp4'],
-    ('1920x1080', '12M'): ['downloaded_segments/segment_bbb_sunflower_1280x720_12Minit.mp4'],
+    ('1920x1080', '12M'): ['downloaded_segments/segment_bbb_sunflower_1920x1080_12Minit.mp4'],
     ('3840x2160', '14M'): ['downloaded_segments/segment_bbb_sunflower_3840x2160_14Minit.mp4'],
     ('3840x2160', '16M'): ['downloaded_segments/segment_bbb_sunflower_3840x2160_16Minit.mp4'],
     ('3840x2160', '18M'): ['downloaded_segments/segment_bbb_sunflower_3840x2160_18Minit.mp4']

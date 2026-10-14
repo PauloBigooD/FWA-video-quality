@@ -139,7 +139,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         input_file = sys.argv[1]
     else:
-        input_file = "maxwell_2026-10-07T16-27-22-747Z.har"
+        input_file = "/home/paulobigood/har_logs/paulobigood_2026-10-13T13-04-32-278Z.har"
 
     check_segments(input_file)
 
