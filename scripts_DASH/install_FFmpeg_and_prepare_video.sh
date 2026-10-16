@@ -63,34 +63,30 @@ else
     echo "✅ FFmpeg com suporte ao VMAF instalado em /usr/local/bin/ffmpeg."
 fi
 
-# 4. Instalar pacotes Python
+# 4. Instalar pacotes Python (incluindo gdown para o Google Drive)
 echo "--> Instalando dependências Python..."
 pip3 install --upgrade pip
-pip3 install pandas requests
+pip3 install pandas requests gdown
 
-# 5. Criar diretórios de estrutura
+# 5. Criar diretórios de trabalho
 echo "--> Criando diretórios de trabalho..."
-mkdir -p video video-dash segments_csv downloaded_segments
+mkdir -p video video-dash segments_csv downloaded_segments plot_results
 
-# 6. Download do vídeo de referência (4K)
+# 6. Download do vídeo de referência 4K a partir do Google Drive
 VIDEO_PATH="video/bbb_sunflower_2160p_60fps_normal.mp4"
-if [ ! -f "$VIDEO_PATH" ]; then
-    echo "--> Baixando vídeo de referência Big Buck Bunny 4K..."
-    wget -O "$VIDEO_PATH" https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd || true
-    
-    # Se o link direto falhar, usa o fallback do mirror
-    if [ ! -s "$VIDEO_PATH" ]; then
-        echo "--> Baixando via repositório de mídia..."
-        wget -O "$VIDEO_PATH" "https://upload.wikimedia.org/wikipedia/commons/2/22/Big_Buck_Bunny_Teaser_400p_for_HTML5_h264.mp4"
-    fi
+GDRIVE_ID="1X9iPbrGkkO1EwN1hVC9Hgii6uENZUkCQ"
+
+if [ ! -f "$VIDEO_PATH" ] || [ ! -s "$VIDEO_PATH" ]; then
+    echo "--> Baixando vídeo de referência do Google Drive (ID: $GDRIVE_ID)..."
+    gdown "https://drive.google.com/uc?id=${GDRIVE_ID}" -O "$VIDEO_PATH"
     echo "✅ Vídeo baixado em $VIDEO_PATH."
 else
-    echo "✅ Vídeo de referência já existe em $VIDEO_PATH."
+    echo "✅ Vídeo de referência já existe e não está vazio em $VIDEO_PATH."
 fi
 
-# 7. Criar link simbólico do vídeo 4k.mp4
+# 7. Criar link simbólico do vídeo de referência para 4k.mp4
 if [ ! -L "4k.mp4" ] && [ ! -f "4k.mp4" ]; then
-    ln -sf video/bbb_sunflower_2160p_60fps_normal.mp4 4k.mp4
+    ln -sf "$VIDEO_PATH" 4k.mp4
     echo "✅ Link simbólico 4k.mp4 criado."
 fi
 

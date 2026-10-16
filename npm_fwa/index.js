@@ -11,7 +11,7 @@ const DASH_URL = process.env.DASH_URL || 'http://172.31.0.54:8080/';  // ← htt
 const FORCE_QUIC = (process.env.FORCE_QUIC || 'true') !== 'false';  // false = usar Alt-Svc (fallback TCP possível)
 const DURATION_SEC = parseInt(process.env.DURATION_SEC || '180', 10);
 const CLIENT_ID = process.env.CLIENT_ID || os.hostname();
-const COLLECTOR_URL = process.env.COLLECTOR_URL || 'http://192.168.110.41:9999/upload';
+const COLLECTOR_URL = process.env.COLLECTOR_URL || 'http://0.0.0.0:9999/upload';
 const HEADLESS = process.env.HEADLESS === 'false';
 const MAX_TIMEOUT_SEC = Math.max(240, DURATION_SEC * 1.3); // máximo 1.5x duração ou 4 min
 
@@ -41,7 +41,7 @@ const MAX_TIMEOUT_SEC = Math.max(240, DURATION_SEC * 1.3); // máximo 1.5x dura�
       '--ignore-certificate-errors',      // ← reforço via flag do Chrome (TCP/TLS)
       '--ignore-certificate-errors-spki-list=6LyMlhPlTCXv2m6y897sA2GvEtB2jnpMpedlW5HN0Rg=',  // ← cobre QUIC (autoassinado)
       '--enable-quic',                    // ← garante QUIC/HTTP3 habilitado
-      ...(FORCE_QUIC ? ['--origin-to-force-quic-on=172.31.0.220:443'] : []),  // ← força QUIC (falha se UDP bloqueado)
+      ...(FORCE_QUIC ? ['--origin-to-force-quic-on=172.31.0.54:443'] : []),  // ← força QUIC (falha se UDP bloqueado)
     ]
   });
 
